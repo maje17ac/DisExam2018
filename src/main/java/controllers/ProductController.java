@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import model.Product;
 import utils.Log;
 
+//IMPLEMENTER CACHING.
 public class ProductController {
 
   private static DatabaseController dbCon;

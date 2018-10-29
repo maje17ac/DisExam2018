@@ -135,6 +135,8 @@ public class OrderController {
     // Save the user to the database and save them back to initial order instance
     order.setCustomer(UserController.createUser(order.getCustomer()));
 
+    // Når man lager en ny ordre, så skal man opprette x antalll linjer og en bruger og to adresser, hva skjer hvis noe går galt underveis, feil inntasting i shipping, opprett på annet hvis eller rulle tilbake
+
     // TODO: Enable transactions in order for us to not save the order if somethings fails for some of the other inserts.
 
     // Insert the product in the DB

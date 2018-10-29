@@ -1,5 +1,5 @@
 package model;
-
+//alle reviews ligger i solr, gemmer ikke noe i databasen
 public class Review {
 
   private int id;

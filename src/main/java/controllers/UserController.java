@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import model.User;
 import utils.Log;
 
+
 public class UserController {
 
   private static DatabaseController dbCon;
@@ -107,6 +108,7 @@ public class UserController {
     }
 
     // Insert the user in the DB
+    // hashing algoritmer er implementert så bruk dette.
     // TODO: Hash the user password before saving it.
     int userID = dbCon.insert(
         "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"

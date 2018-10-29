@@ -26,9 +26,12 @@ public class ProductEndpoints {
     // Call our controller-layer in order to get the order from the DB
     Product product = ProductController.getProduct(idProduct);
 
-    // TODO: Add Encryption to JSON
+    // TODO: Add Encryption to JSON: FIX
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(product);
+    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
+     json = Encryption.encryptDecryptXOR(json);
+                                                  */
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
@@ -42,9 +45,12 @@ public class ProductEndpoints {
     // Call our controller-layer in order to get the order from the DB
     ArrayList<Product> products = ProductController.getProducts();
 
-    // TODO: Add Encryption to JSON
+    // TODO: Add Encryption to JSON: FIX
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(products);
+    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
+     json = Encryption.encryptDecryptXOR(json);
+                                                  */
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
