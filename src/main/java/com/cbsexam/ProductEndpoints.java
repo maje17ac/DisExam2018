@@ -11,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Product;
+import utils.Encryption;
 
 @Path("product")
 public class ProductEndpoints {
@@ -29,9 +30,10 @@ public class ProductEndpoints {
     // TODO: Add Encryption to JSON: FIX
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(product);
-    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
-     json = Encryption.encryptDecryptXOR(json);
-                                                  */
+
+    // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+    json = Encryption.encryptDecryptXOR(json);
+
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
@@ -48,9 +50,10 @@ public class ProductEndpoints {
     // TODO: Add Encryption to JSON: FIX
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(products);
-    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
-     json = Encryption.encryptDecryptXOR(json);
-                                                  */
+
+    // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+    json = Encryption.encryptDecryptXOR(json);
+
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
