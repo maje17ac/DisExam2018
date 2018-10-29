@@ -10,7 +10,7 @@ import java.util.ArrayList;
 //TODO: Build this cache and use it : FIX
 public class OrderCache {
 
-   /* // List of orders
+  // List of orders
     private ArrayList<Order> orders;
 
     // Time cache should live
@@ -43,5 +43,5 @@ public class OrderCache {
         // Return the documents
         return this.orders;
 
-    }*/
+    }
 }
