@@ -8,6 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.Review;
+import utils.Encryption;
 
 @Path("search")
 public class ReviewEndpoints {
@@ -26,9 +27,9 @@ public class ReviewEndpoints {
     // TODO: Add Encryption to JSON : FIX
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(reviews);
-    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
-     json = Encryption.encryptDecryptXOR(json);
-                                                  */
+
+    // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+    json = Encryption.encryptDecryptXOR(json);
 
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();
