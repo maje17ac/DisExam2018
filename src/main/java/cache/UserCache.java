@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 //TODO: Build this cache and use it : FIX
 public class UserCache {
-    /*
+    /* DEMO IGEN
     // List of users
     private ArrayList<User> users;
 
