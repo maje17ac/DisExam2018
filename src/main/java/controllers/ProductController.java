@@ -3,7 +3,11 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import cache.ProductCache;
+import com.sun.deploy.cache.CacheEntry;
 import model.Product;
+import sun.misc.Cache;
 import utils.Log;
 
 //IMPLEMENTER CACHING.
@@ -99,6 +103,7 @@ public class ProductController {
     }
 
     // TODO: Use caching layer.
+    
     String sql = "SELECT * FROM product";
 
     ResultSet rs = dbCon.query(sql);

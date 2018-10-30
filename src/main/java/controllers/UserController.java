@@ -126,6 +126,9 @@ public class UserController {
     if (userID != 0) {
       //Update the userid of the user before returning
       user.setId(userID);
+
+      //utils.Hashing.md5(String);???
+
     } else{
       // Return null if user has not been inserted into database
       return null;

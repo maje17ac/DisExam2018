@@ -34,9 +34,10 @@ public class UserEndpoints {
     // Convert the user object to json in order to return the object
     String json = new Gson().toJson(user);
 
-    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
-     json = Encryption.encryptDecryptXOR(json);
-                                                  */
+    // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+    json = Encryption.encryptDecryptXOR(json);
+
+
 
     /* Man kunne forestille seg at det skal returneres noe annet?? Hvis man ikke kunne finne det id, så kan brugeren ha noe annet en noe tomt svar. Gjelde de andre endpoints hvis det er, showcase */
     // Return the user with the status code 200
@@ -55,15 +56,13 @@ public class UserEndpoints {
     // Get a list of users
     ArrayList<User> users = UserController.getUsers();
 
-    // TODO: Add Encryption to JSON :FIX
+    // TODO: Add Encryption to JSON: FIX
 
     // Transfer users to json in order to return it to the user
     String json = new Gson().toJson(users);
 
-
-    /* SLIK KAN MAN KALLE PÅ METODEN I UTILS ENCRYPTION, OG KYRPTERE STRING AV JSON
-     json = Encryption.encryptDecryptXOR(json);
-                                                  */
+    // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+    json = Encryption.encryptDecryptXOR(json);
 
 
     // Return the users with the status code 200
@@ -100,6 +99,7 @@ public class UserEndpoints {
   @Path("/login")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response loginUser(String x) {
+
 
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();
