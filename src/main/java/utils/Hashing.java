@@ -7,6 +7,8 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
+  private String salt = "null";
+
   //TILFØY SALT TIL HASHING(ARTIKKEL: BEST PRACTICE, SALT OG HASHING AV USER PASS)
   // TODO: You should add a salt and make this secure
   public static String md5(String rawString) {
@@ -58,5 +60,11 @@ public final class Hashing {
     }
 
     return rawString;
+  }
+
+  public String hashWithSalt(String string){
+    String salt = string+this.salt;
+    return md5(salt);
+
   }
 }
