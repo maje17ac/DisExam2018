@@ -110,7 +110,7 @@ public class UserController {
 
     // Insert the user in the DB
     // hashing algoritmer er implementert så bruk dette.
-    // TODO: Hash the user password before saving it.
+    // TODO: Hash the user password before saving it : FIX
     Hashing hashing = new Hashing();
     int userID = dbCon.insert(
         "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
@@ -118,7 +118,7 @@ public class UserController {
             + "', '"
             + user.getLastname()
             + "', '"
-            + hashing.hashWithSalt(user.getPassword())  //Hashing user password with salt before saving.
+            + hashing.saltyHash(user.getPassword())  //Hashing user password with salt before saving.
             + "', '"
             + user.getEmail()
             + "', "

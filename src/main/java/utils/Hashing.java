@@ -7,7 +7,7 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  private String salt = "null";
+  private String salt = "dj8vwEjfes392taWjfiwe2";
 
   //TILFØY SALT TIL HASHING(ARTIKKEL: BEST PRACTICE, SALT OG HASHING AV USER PASS)
   // TODO: You should add a salt and make this secure
@@ -63,9 +63,9 @@ public final class Hashing {
   }
 
   // Method to hash the password with salt, with a string parameter
-  public String hashWithSalt(String string){
+  public String saltyHash(String password){
     //Creating a salty String to the rawString in method md5, to add salt to the hashing.
-    String salt = string+this.salt;
+    String salt = password+this.salt;
     return md5(salt);
 
   }

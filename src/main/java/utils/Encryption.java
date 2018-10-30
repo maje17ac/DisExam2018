@@ -6,7 +6,6 @@ public final class Encryption {
 
     //LAG EN BEDRE NØKKEL OG GEM DEN ET BEDRE STED
     // If encryption is enabled in Config.
-    //finte; en bolean setting, hvis den er false så skipper man kryptering, slik at man kan se om krypteringen virker eller ikke
     if (Config.getEncryption()) {
 
       // The key is predefined and hidden in code
