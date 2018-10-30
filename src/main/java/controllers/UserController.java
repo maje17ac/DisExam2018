@@ -137,4 +137,24 @@ public class UserController {
     // Return user
     return user;
   }
+
+
+  /*
+  public static User login(User user) {
+
+    return user;
+  }
+
+  public static User deleteUser(User user) {
+
+    return user;
+  }
+
+
+
+  public static User updateUser(User user) {
+    return user;
+  }
+  */
+
 }
