@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 //TODO: Build this cache and use it : FIX
 public class OrderCache {
-
+/*
   // List of orders
     private ArrayList<Order> orders;
 
@@ -44,4 +44,6 @@ public class OrderCache {
         return this.orders;
 
     }
+
+    */
 }

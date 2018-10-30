@@ -7,8 +7,10 @@ import utils.Config;
 import java.util.ArrayList;
 
 //TODO: Build this cache and use it : FIX
-public class UserCache {
 
+
+public class UserCache {
+/*
     // List of users
     private ArrayList<User> users;
 
@@ -44,5 +46,5 @@ public class UserCache {
 
     }
 
-
+*/
 }
