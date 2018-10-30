@@ -118,7 +118,7 @@ public class UserController {
             + "', '"
             + user.getLastname()
             + "', '"
-            + hashing.hashWithSalt(user.getPassword())
+            + hashing.hashWithSalt(user.getPassword())  //Hashing user password with salt before saving.
             + "', '"
             + user.getEmail()
             + "', "
