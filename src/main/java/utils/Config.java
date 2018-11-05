@@ -20,8 +20,8 @@ public final class Config {
     private static int SOLR_PORT;
     private static String SOLR_PATH;
     private static String SOLR_CORE;
-    private static long PRODUCT_TTL;
     private static String ENCRYPTION_KEY;
+    private static long PRODUCT_TTL;
     //private static long ORDER_TTL;
     //private static long USER_TTL;
 
