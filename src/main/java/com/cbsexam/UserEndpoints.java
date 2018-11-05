@@ -1,5 +1,6 @@
 package com.cbsexam;
 
+import cache.UserCache;
 import com.google.gson.Gson;
 import controllers.UserController;
 
@@ -19,6 +20,8 @@ import utils.Log;
 //Alle de endpoints som er fra userklassen, bruker path "user"
 @Path("user")
 public class UserEndpoints {
+    //MAIKEN NOTES:
+    UserCache userCache = new UserCache();
 
     /**
      * @param idUser
@@ -57,8 +60,9 @@ public class UserEndpoints {
         // Write to log that we are here
         Log.writeLog(this.getClass().getName(), this, "Get all users", 0);
 
+        //MAIKEN NOTES:
         // Get a list of users
-        ArrayList<User> users = UserController.getUsers();
+        ArrayList<User> users = userCache.getUsers(false);
 
         // TODO: Add Encryption to JSON: FIX
 

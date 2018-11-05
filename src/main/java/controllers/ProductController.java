@@ -3,22 +3,15 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import cache.ProductCache;
-import com.sun.deploy.cache.CacheEntry;
 import model.Product;
-import sun.misc.Cache;
 import utils.Log;
 
-//IMPLEMENTER CACHING.
 public class ProductController {
 
   private static DatabaseController dbCon;
-  private static ProductCache productCache;
 
   public ProductController() {
     dbCon = new DatabaseController();
-    productCache = new ProductCache();
   }
 
   public static Product getProduct(int id) {
@@ -104,15 +97,7 @@ public class ProductController {
       dbCon = new DatabaseController();
     }
 
-    // TODO: Use caching layer : WORKING (DO THE SAME IN ORDER/USER C. TO USE CACHING)
-
-    /*if (){
-
-    }*/
-    //gemme den i en variabel, og hvis den er tom sql kode, hvis den ikke er det så get product i cache,
-    productCache.getProducts(true);
-
-
+    // TODO: Use caching layer : WORKING
     String sql = "SELECT * FROM product";
 
     ResultSet rs = dbCon.query(sql);

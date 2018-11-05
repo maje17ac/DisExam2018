@@ -3,7 +3,6 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import cache.OrderCache;
 import model.Address;
 import model.LineItem;
@@ -80,6 +79,7 @@ public class OrderController {
     if (dbCon == null) {
       dbCon = new DatabaseController();
     }
+
 
     String sql = "SELECT * FROM order";
 
