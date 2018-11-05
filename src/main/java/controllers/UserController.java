@@ -3,6 +3,9 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import cache.ProductCache;
+import cache.UserCache;
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -108,6 +111,7 @@ public class UserController {
       dbCon = new DatabaseController();
     }
 
+
     // Insert the user in the DB
     // hashing algoritmer er implementert så bruk dette.
     // TODO: Hash the user password before saving it : FIX
@@ -118,7 +122,7 @@ public class UserController {
             + "', '"
             + user.getLastname()
             + "', '"
-            + hashing.saltyHash(user.getPassword())  //Hashing user password with salt before saving.
+            + hashing.saltyHashMd5(user.getPassword()) + hashing.saltyHashSha(user.getPassword())  //Hashing user password with salt before saving.
             + "', '"
             + user.getEmail()
             + "', "

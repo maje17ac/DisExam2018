@@ -3,6 +3,8 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import cache.OrderCache;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -23,6 +25,9 @@ public class OrderController {
     if (dbCon == null) {
       dbCon = new DatabaseController();
     }
+
+    //OrderCache orderCache = new OrderCache();
+    //orderCache.getOrders(true);
 
     // Build SQL string to query
     String sql = "SELECT * FROM orders where id=" + id;

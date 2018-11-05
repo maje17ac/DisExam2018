@@ -28,8 +28,8 @@ public final class Config {
     public static long getProductTtl() {
         return PRODUCT_TTL;
     }
-
-    /*public static long getOrderTtl() {
+/*
+    public static long getOrderTtl() {
         return ORDER_TTL;
     }
 
@@ -115,8 +115,8 @@ public final class Config {
         SOLR_PORT = Integer.parseInt(json.get("SOLR_PORT").toString().replace("\"", ""));
         SOLR_PATH = json.get("SOLR_PATH").toString().replace("\"", "");
         SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
-        PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
         ENCRYPTION_KEY = json.get("ENCRYPTION_KEY").getAsString();
+        PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
         //ORDER_TTL = json.get("ORDER_TTL").getAsLong();
         //USER_TTL = json.get("USER_TTL").getAsLong();
     }
