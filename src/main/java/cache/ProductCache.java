@@ -4,10 +4,7 @@ import controllers.ProductController;
 import java.util.ArrayList;
 import model.Product;
 import utils.Config;
-// DETTE ER EN MÅTE Å LAGE CACHE PÅ, MAN KAN BENYTTE ANDRE MÅTER, TENK PÅ Å BRUKE DE TRE CACHEKLASSER ULIKT ELLER LIKT??
-// DE SKAL OGSÅ BRUKES, SÅ SØRG FOR AT DET BLIR GJORT.
-// UTFORDRINGER M. CACHING: 1)FORELDET DATA I VÅRES CASH 2) IKKE HAR DET NYESTE DATA I VÅRES CASH 3) VI CACHER NOE SOM VI IKKE FÅR EN VERDI AV Å CASHE, DET VIL TA LENGER TID ALTSÅ MAN KAN FORSINKE SYSTEMET
-//SKAL IMPLEMENTERE CACHING FOR PRODUKTER
+
 public class ProductCache {
 
   // List of products
@@ -28,11 +25,11 @@ public class ProductCache {
     // If we wish to clear cache, we can set force update.
     // Otherwise we look at the age of the cache and figure out if we should update.
     // If the list is empty we also check for new products
-    // MAIKEN NOTES: ENDRET FRA >= til <=
+    // MAIKEN NOTES: ENDRET FRA >= til <= && i stedet for this.orders.isEmpty(): this.orders == null
 
     if (forceUpdate
         || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
-        || this.products.isEmpty()) {
+        || this.products == null) {
 
       // Get products from controller, since we wish to update.
       ArrayList<Product> products = ProductController.getProducts();

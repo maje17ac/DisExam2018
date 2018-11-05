@@ -10,7 +10,7 @@ public final class Hashing {
   private String salt = "dj8vwEjfes392taWjfiwe2";
 
   //TILFØY SALT TIL HASHING(ARTIKKEL: BEST PRACTICE, SALT OG HASHING AV USER PASS)
-  // TODO: You should add a salt and make this secure : FIX
+  // TODO: You should add a salt and make this secure : FIXED
   public static String md5(String rawString) {
     try {
 
@@ -40,7 +40,7 @@ public final class Hashing {
     return null;
   }
 
-  // TODO: You should add a salt and make this secure : FIX
+  // TODO: You should add a salt and make this secure : FIXED
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
@@ -69,8 +69,5 @@ public final class Hashing {
     return md5(salt);
 
   }
-
-  // TO forskjellige algoritmer til å hashe, jeg bruker md5 fordi det tar litt kortere tid, man trenger kun å hashe passordet med salt og lage den sikrere med en av metodene :)
-
 
 }

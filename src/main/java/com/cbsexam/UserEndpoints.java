@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import model.User;
 import utils.Encryption;
 import utils.Log;
@@ -20,8 +19,13 @@ import utils.Log;
 //Alle de endpoints som er fra userklassen, bruker path "user"
 @Path("user")
 public class UserEndpoints {
+
     //MAIKEN NOTES:
-    UserCache userCache = new UserCache();
+    private static UserCache userCache;
+
+    public UserEndpoints(){
+        this.userCache = new UserCache();
+    }
 
     /**
      * @param idUser
@@ -35,7 +39,7 @@ public class UserEndpoints {
         // Use the ID to get the user from the controller.
         User user = UserController.getUser(idUser);
 
-        // TODO: Add Encryption to JSON : FIX
+        // TODO: Add Encryption to JSON : FIXED
         // Convert the user object to json in order to return the object
         String json = new Gson().toJson(user);
 
@@ -64,7 +68,7 @@ public class UserEndpoints {
         // Get a list of users
         ArrayList<User> users = userCache.getUsers(false);
 
-        // TODO: Add Encryption to JSON: FIX
+        // TODO: Add Encryption to JSON: FIXED
 
         // Transfer users to json in order to return it to the user
         String json = new Gson().toJson(users);
@@ -104,7 +108,7 @@ public class UserEndpoints {
 
 
 /*
-    // TODO: Make the system able to login users and assign them a token to use throughout the system. : WORKING
+    // TODO: Make the system able to login users and assign them a token to use throughout the system. :
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -128,11 +132,15 @@ public class UserEndpoints {
             return Response.status(400).entity("Could not login").build();
         }
     }
+
+    //MAIKEN NOTES:
+        // Get a list of users
+        ArrayList<User> users = userCache.getUsers(true);  (???)
 */
 
 /*
 
-    // TODO: Make the system able to delete users: WORKING
+    // TODO: Make the system able to delete users:
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -155,11 +163,14 @@ public class UserEndpoints {
             return Response.status(400).entity("Could not login").build();
         }
     }
+    //MAIKEN NOTES:
+        // Get a list of users
+        ArrayList<User> users = userCache.getUsers(true); ????
 
 */
 
 /*
-    // TODO: Make the system able to update users: WORKING
+    // TODO: Make the system able to update users:
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -182,5 +193,8 @@ public class UserEndpoints {
         }
     }
 
+        //MAIKEN NOTES:
+        // Get a list of users
+        ArrayList<User> users = userCache.getUsers(true);  ????
     */
 }

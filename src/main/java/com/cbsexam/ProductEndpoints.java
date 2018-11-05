@@ -16,8 +16,13 @@ import utils.Encryption;
 
 @Path("product")
 public class ProductEndpoints {
+
   //MAIKEN NOTES:
-  ProductCache productCache = new ProductCache();
+  private static ProductCache productCache;
+
+  public ProductEndpoints(){
+    this.productCache = new ProductCache();
+  }
 
   /**
    * @param idProduct
