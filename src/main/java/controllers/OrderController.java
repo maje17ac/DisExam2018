@@ -26,8 +26,8 @@ public class OrderController {
       dbCon = new DatabaseController();
     }
 
-    //OrderCache orderCache = new OrderCache();
-    //orderCache.getOrders(true);
+    OrderCache orderCache = new OrderCache();
+    orderCache.getOrders(true);
 
     // Build SQL string to query
     String sql = "SELECT * FROM orders where id=" + id;

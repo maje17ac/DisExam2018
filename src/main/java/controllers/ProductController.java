@@ -104,7 +104,7 @@ public class ProductController {
 
     // TODO: Use caching layer : FIX (NOT SURE IF THIS IS RIGHT !!
     ProductCache productCache = new ProductCache();
-    productCache.getProducts(true);
+    productCache.getProducts(true); //gemme den i en variabel, og hvis den er tom, sql, hvis den ikke er det så sender
 
     String sql = "SELECT * FROM product";
 

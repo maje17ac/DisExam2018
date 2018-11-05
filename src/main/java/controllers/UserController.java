@@ -26,6 +26,9 @@ public class UserController {
       dbCon = new DatabaseController();
     }
 
+    UserCache userCache = new UserCache();
+    userCache.getUsers(true);
+
     // Build the query for DB
     String sql = "SELECT * FROM user where id=" + id;
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 
 public class UserCache {
-/*
+
     // List of users
     private ArrayList<User> users;
 
@@ -46,5 +46,5 @@ public class UserCache {
 
     }
 
-*/
+
 }
