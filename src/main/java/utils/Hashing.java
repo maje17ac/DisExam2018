@@ -64,7 +64,7 @@ public final class Hashing {
 
   // Method to hash the password with salt, with a string parameter
   public String saltyHash(String password){
-    //Creating a salty String to the rawString in method md5, to add salt to the hashing.
+    //Defining the salt string, so it adds the salt string to the password string.
     String salt = password+this.salt;
     return md5(salt);
 

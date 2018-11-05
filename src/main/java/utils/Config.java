@@ -2,7 +2,6 @@ package utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.solr.client.solrj.SolrQuery;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,6 +21,7 @@ public final class Config {
     private static String SOLR_PATH;
     private static String SOLR_CORE;
     private static long PRODUCT_TTL;
+    private static String ENCRYPTION_KEY;
     //private static long ORDER_TTL;
     //private static long USER_TTL;
 
@@ -60,6 +60,10 @@ public final class Config {
 
     public static Boolean getEncryption() {
         return ENCRYPTION;
+    }
+
+    public static char[] getEncryptionKey() {
+        return ENCRYPTION_KEY.toCharArray();
     }
 
     public static String getSolrHost() {
@@ -112,7 +116,10 @@ public final class Config {
         SOLR_PATH = json.get("SOLR_PATH").toString().replace("\"", "");
         SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
         PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
+        ENCRYPTION_KEY = json.get("ENCRYPTION_KEY").getAsString();
         //ORDER_TTL = json.get("ORDER_TTL").getAsLong();
         //USER_TTL = json.get("USER_TTL").getAsLong();
     }
+
+
 }
