@@ -125,7 +125,7 @@ public class UserController {
             + "', '"
             + user.getLastname()
             + "', '"
-            + hashing.saltyHashMd5(user.getPassword()) + hashing.saltyHashSha(user.getPassword())  //Hashing user password with salt before saving.
+            + hashing.saltyHash(user.getPassword())  //Hashing user password with salt before saving.
             + "', '"
             + user.getEmail()
             + "', "

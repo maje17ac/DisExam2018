@@ -63,18 +63,14 @@ public final class Hashing {
   }
 
   // Method to hash the password with salt, with a string parameter
-  public String saltyHashMd5(String password){
+  public String saltyHash(String password){
     //Defining the salt string, so it adds the salt string to the password string.
     String salt = password+this.salt;
     return md5(salt);
 
   }
 
-  public String saltyHashSha(String password){
-    //Defining the salt string, so it adds the salt string to the password string.
-    String salt = password+this.salt;
-    return sha(salt);
+  // TO forskjellige algoritmer til å hashe, jeg bruker md5 fordi det tar litt kortere tid, man trenger kun å hashe passordet med salt og lage den sikrere med en av metodene :)
 
-  }
 
 }

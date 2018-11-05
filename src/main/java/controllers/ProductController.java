@@ -14,9 +14,11 @@ import utils.Log;
 public class ProductController {
 
   private static DatabaseController dbCon;
+  private static ProductCache productCache;
 
   public ProductController() {
     dbCon = new DatabaseController();
+    productCache = new ProductCache();
   }
 
   public static Product getProduct(int id) {
@@ -102,9 +104,14 @@ public class ProductController {
       dbCon = new DatabaseController();
     }
 
-    // TODO: Use caching layer : FIX (NOT SURE IF THIS IS RIGHT !!
-    ProductCache productCache = new ProductCache();
-    productCache.getProducts(true); //gemme den i en variabel, og hvis den er tom, sql, hvis den ikke er det så sender
+    // TODO: Use caching layer : WORKING (DO THE SAME IN ORDER/USER C. TO USE CACHING)
+
+    /*if (){
+
+    }*/
+    //gemme den i en variabel, og hvis den er tom sql kode, hvis den ikke er det så get product i cache,
+    productCache.getProducts(true);
+
 
     String sql = "SELECT * FROM product";
 
