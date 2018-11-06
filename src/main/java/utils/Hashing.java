@@ -7,7 +7,7 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  private String salt = "dj8vwEjfes392taWjfiwe2";
+  private String salt = null;
 
   //TILFØY SALT TIL HASHING(ARTIKKEL: BEST PRACTICE, SALT OG HASHING AV USER PASS)
   // TODO: You should add a salt and make this secure : FIXED
@@ -70,4 +70,7 @@ public final class Hashing {
 
   }
 
+  public void setSalt(String salt) {
+    this.salt = salt;
+  }
 }

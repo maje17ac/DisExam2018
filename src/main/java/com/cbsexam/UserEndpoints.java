@@ -1,9 +1,7 @@
 package com.cbsexam;
-
 import cache.UserCache;
 import com.google.gson.Gson;
 import controllers.UserController;
-
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -103,11 +101,9 @@ public class UserEndpoints {
             return Response.status(400).entity("Could not create user").build();
         }
     }
+
     // TRE Endpoints som ikke er laget enda, implementer logikken, endpointet er der,
-    // Hva skal man ha som funksjonalitet!! LOGIN, DELETE OG UPDATE
-
-
-/*
+    //MAIKEN NOTES:
     // TODO: Make the system able to login users and assign them a token to use throughout the system. :
     @POST
     @Path("/login")
@@ -115,61 +111,33 @@ public class UserEndpoints {
     public Response loginUser(String body) {
 
 
-        // Read the json from body and transfer it to a user class
-        User newUser = new Gson().fromJson(body, User.class);
 
-        // Use the controller to add the user
-        User loginUser = UserController.login(newUser);
 
-        // Get the user back with the added ID and return it to the user
-        String json = new Gson().toJson(loginUser);
 
-        // Return the data to the user
-        if (loginUser != null) {
-            // Return a response with status 200 and JSON as type
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
-        } else {
             return Response.status(400).entity("Could not login").build();
-        }
+
     }
 
-    //MAIKEN NOTES:
-        // Get a list of users
-        ArrayList<User> users = userCache.getUsers(true);  (???)
-*/
 
 /*
 
-    // TODO: Make the system able to delete users:
+    // TODO: Make the system able to delete users: WORKING
     @POST
-    @Path("/")
+    @Path("/delete/{idUSER}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteUser(String body) {
+        int id = 0;
 
-        // Read the json from body and transfer it to a user class
-        User newUser = new Gson().fromJson(body, User.class);
+        UserController.delete(id);
 
-        // Use the controller to add the user
-        User deleteUser = UserController.deleteUser(newUser);
+        userCache.getUsers(true);
 
-        // Get the user back with the added ID and return it to the user
-        String json = new Gson().toJson(deleteUser);
-
-        // Return the data to the user
-        if (deleteUser != null) {
-            // Return a response with status 200 and JSON as type
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
-        } else {
-            return Response.status(400).entity("Could not login").build();
-        }
+        return Response.status(400).entity("Deleted the user with id" + id).build();
     }
-    //MAIKEN NOTES:
-        // Get a list of users
-        ArrayList<User> users = userCache.getUsers(true); ????
 
-*/
 
-/*
+
+
     // TODO: Make the system able to update users:
     @POST
     @Path("/")
