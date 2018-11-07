@@ -25,18 +25,6 @@ public final class Config {
     private static long ORDER_TTL;
     private static long USER_TTL;
 
-    public static long getProductTtl() {
-        return PRODUCT_TTL;
-    }
-
-    public static long getOrderTtl() {
-        return ORDER_TTL;
-    }
-
-    public static long getUserTtl() {
-        return USER_TTL;
-    }
-
 
     public static String getDatabaseHost() {
         return DATABASE_HOST;
@@ -62,9 +50,6 @@ public final class Config {
         return ENCRYPTION;
     }
 
-    public static char[] getEncryptionKey() {
-        return ENCRYPTION_KEY.toCharArray();
-    }
 
     public static String getSolrHost() {
         return SOLR_HOST;
@@ -82,7 +67,24 @@ public final class Config {
         return SOLR_CORE;
     }
 
+    public static char[] getEncryptionKey() {
+        return ENCRYPTION_KEY.toCharArray();
+    }
+
+    public static long getProductTtl() {
+        return PRODUCT_TTL;
+    }
+
+    public static long getOrderTtl() {
+        return ORDER_TTL;
+    }
+
+    public static long getUserTtl() {
+        return USER_TTL;
+    }
+
     public static void initializeConfig() throws IOException {
+
 
         // Init variables to parse JSON
         JsonObject json;

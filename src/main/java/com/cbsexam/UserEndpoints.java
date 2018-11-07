@@ -1,7 +1,9 @@
 package com.cbsexam;
+
 import cache.UserCache;
 import com.google.gson.Gson;
 import controllers.UserController;
+
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -10,6 +12,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import model.User;
 import utils.Encryption;
 import utils.Log;
@@ -19,10 +22,12 @@ import utils.Log;
 public class UserEndpoints {
 
     //MAIKEN NOTES:
-    private static UserCache userCache;
+    private UserCache userCache;
+    private UserController userController;
 
-    public UserEndpoints(){
+    public UserEndpoints() {
         this.userCache = new UserCache();
+        this.userController = new UserController();
     }
 
     /**
@@ -48,8 +53,20 @@ public class UserEndpoints {
 
     /* Man kunne forestille seg at det skal returneres noe annet?? Hvis man ikke kunne finne det id, så kan brugeren ha noe annet en noe tomt svar. Gjelde de andre endpoints hvis det er, showcase */
         // Return the user with the status code 200
-        // TODO: What should happen if something breaks down?
-        return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+        // TODO: What should happen if something breaks down? : (if/else and try catch on return for response status)  WORKING
+        //MAIKEN NOTES:
+
+        try {
+            if (user != null) {
+                // Return a response with status 200 and JSON as type
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+            } else {
+                return Response.status(400).entity("Could not get user").build();
+            }
+        } catch (Exception e1) {
+            System.out.println(e1.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -75,9 +92,21 @@ public class UserEndpoints {
         json = Encryption.encryptDecryptXOR(json);
 
 
-        // Return the users with the status code 200
-        return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();
+        //MAIKEN NOTES:
+
+        try {
+            if (users != null) {
+                // Return a response with status 200 and JSON as type
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+            } else {
+                return Response.status(400).entity("Could not get user").build();
+            }
+        } catch (Exception e2) {
+            System.out.println(e2.getMessage());
+        }
+        return null;
     }
+
 
     @POST
     @Path("/")
@@ -93,76 +122,86 @@ public class UserEndpoints {
         // Get the user back with the added ID and return it to the user
         String json = new Gson().toJson(createUser);
 
+        //MAIKEN NOTES: IN CASE OF CRASH FIX TRY CATCH
         // Return the data to the user
-        if (createUser != null) {
-            // Return a response with status 200 and JSON as type
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
-        } else {
-            return Response.status(400).entity("Could not create user").build();
+        try {
+            if (createUser != null) {
+                // Return a response with status 200 and JSON as type
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+            } else {
+                return Response.status(400).entity("Could not create user").build();
+            }
+
+        } catch (Exception e3) {
+            System.out.println(e3.getMessage());
         }
+        return null;
     }
 
     // TRE Endpoints som ikke er laget enda, implementer logikken, endpointet er der,
     //MAIKEN NOTES:
-    // TODO: Make the system able to login users and assign them a token to use throughout the system. :
+    // TODO: Make the system able to login users and assign them a token to use throughout the system. : FIXED ???
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginUser(String body) {
 
+        User user = new Gson().fromJson(body, User.class);
 
+        String token = userController.login(user);
 
-
-
-            return Response.status(400).entity("Could not login").build();
-
+        // Return the data to the user
+        try {
+            if (token != null) {
+                // Return a response with status 200 and JSON as type
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+            } else {
+                return Response.status(400).entity("Could not login").build();
+            }
+        } catch (Exception e4) {
+            System.out.println(e4.getMessage());
+        }
+        return null;
     }
 
 
-/*
-
-    // TODO: Make the system able to delete users: WORKING
+    // TODO: Make the system able to delete users:
     @POST
     @Path("/delete/{idUSER}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteUser(String body) {
-        int id = 0;
 
-        UserController.delete(id);
+        User user = new Gson().fromJson(body, User.class);
 
-        userCache.getUsers(true);
+        String token = userController.delete(user);
 
-        return Response.status(400).entity("Deleted the user with id" + id).build();
+        // Return the data to the user
+        try {
+            if (token != null) {
+                // Return a response with status 200 and JSON as type
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+            } else {
+                return Response.status(400).entity("Could not login").build();
+            }
+        } catch (Exception e5) {
+            System.out.println(e5.getMessage());
+        }
+        return null;
     }
 
+}
 
-
+/*
 
     // TODO: Make the system able to update users:
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(String body) {
-        // Read the json from body and transfer it to a user class
-        User newUser = new Gson().fromJson(body, User.class);
 
-        // Use the controller to add the user
-        User updateUser = UserController.updateUser(newUser);
 
-        // Get the user back with the added ID and return it to the user
-        String json = new Gson().toJson(updateUser);
 
-        // Return the data to the user
-        if (updateUser != null) {
-            // Return a response with status 200 and JSON as type
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
-        } else {
-            return Response.status(400).entity("Could not login").build();
-        }
-    }
+    } */
 
-        //MAIKEN NOTES:
-        // Get a list of users
-        ArrayList<User> users = userCache.getUsers(true);  ????
-    */
+
 }

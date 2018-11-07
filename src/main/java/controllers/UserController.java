@@ -6,24 +6,26 @@ import java.util.ArrayList;
 
 import cache.UserCache;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import model.User;
 import utils.Hashing;
 import utils.Log;
 
 
 public class UserController {
-    private static DatabaseController dbCon;
     //MAIKEN NOTES:
-    String token = null;
+    private static DatabaseController dbCon;
     private static Hashing hashing;
-
+    private String token;
 
     public UserController() {
-        dbCon = new DatabaseController();
-        //MAIKEN NOTES:
-        hashing = new Hashing();
+        this.dbCon = new DatabaseController();
+        this.hashing = new Hashing();
+        this.token = null;
 
     }
 
@@ -69,8 +71,7 @@ public class UserController {
             System.out.println(ex.getMessage());
         }
 
-        //MAIKEN NOTES: se på det her!!!!
-        // Return null
+        // Return null -- MAIKE NOTES: Se på det her, returen av verdien user er alltid null, da det er definert lenger oppe (linje 47) :)
         return user;
     }
 
@@ -117,7 +118,6 @@ public class UserController {
     }
 
     public static User createUser(User user) {
-       Hashing hashing = new Hashing();
         // Write in log that we've reach this step
         Log.writeLog(UserController.class.getName(), user, "Actually creating a user in DB", 0);
 
@@ -162,77 +162,83 @@ public class UserController {
         }
 
 
-
-
         // Return user
         return user;
     }
 
 
     //MAIKEN NOTES:
-   public String login(String email, String password) {
+    public String login(User user) {
 
-       // Build the query for DB
-       String sql = "SELECT * FROM user where email=" + email;
+        // Write in log that we've reach this step
+        Log.writeLog(UserController.class.getName(), user, "Login", 0);
 
-       // Actually do the query
-       ResultSet rs = dbCon.query(sql);
-       User user = null;
+        // Build the query for DB
+        String sql = "SELECT * FROM user where email=" + user.getEmail() + " AND password=" + hashing.saltyHash(user.getPassword());
 
-       try {
-           // Get first object, since we only have one
-           if (rs.next()) {
-               user = new User(
-                       rs.getInt("id"),
-                       rs.getString("first_name"),
-                       rs.getString("last_name"),
-                       rs.getString("password"),
-                       rs.getString("email"),
-                       rs.getLong("created_at"));
+        // Actually do the query
+        ResultSet rs = dbCon.query(sql);
+        User loginUser = null;
 
-               hashing.setSalt(String.valueOf(user.getCreatedTime()));
-               if (user.getPassword().equals(hashing.saltyHash(password))) {
+        try {
+            // Get first object, since we only have one
+            if (rs.next()) {
+                user = new User(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getLong("created_at"));
 
-                   //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
-                   //FINN UT HVA HMAC256 ER FOR NOE
-                   try {
-                       Algorithm algorithm = Algorithm.HMAC256("secret");
+                hashing.setSalt(String.valueOf(user.getCreatedTime()));
+                if (user.getPassword().equals(hashing.saltyHash(user.getPassword()))) {
+
+                    //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
+                    //FINN UT HVA HMAC256 ER FOR NOE
+                    try {
+                        Algorithm algorithm = Algorithm.HMAC256("secret");
                         token = JWT.create()
-                               .withIssuer("auth0")
-                               .sign(algorithm);
-                   } catch (JWTCreationException exception) {
-                       //Invalid Signing configuration / Couldn't convert Claims.
-                   }
+                                .withIssuer("auth0")
+                                .sign(algorithm);
+                    } catch (JWTCreationException exception) {
+                        //Invalid Signing configuration / Couldn't convert Claims.
+                    }
 
-                   return token;
-               }
+                    //VERIFISERER TOKEN: SE OM JEG BURDE HA DETTE
+                    String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE";
+                    try {
+                        Algorithm algorithm = Algorithm.HMAC256("secret");
+                        JWTVerifier verifier = JWT.require(algorithm)
+                                .withIssuer("auth0")
+                                .build(); //Reusable verifier instance
+                        DecodedJWT jwt = verifier.verify(token);
+                    } catch (JWTVerificationException exception) {
+                        System.out.println(exception.getMessage());
+                        //Invalid signature/claims
+                    }
+                    //Returnerer token direkte
+                    return token;
+                }
 
-           } else {
-               System.out.println("No user found");
-           }
-       } catch (SQLException ex) {
-           System.out.println(ex.getMessage());
-       }
-       return null;
-   }
+            } else {
+                System.out.println("No user found");
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
 
 
-/*
-  public static User delete(int id) {
-      Log.writeLog(UserController.class.getName(), id, "Delet", 0);
+    public String delete(User user) {
+        return null;
+    }
 
-      if (dbCon == null){
-          dbCon = new DatabaseController();
-      }
-      //dbCon.delete
-      return getUser(id);
-  }
 
-*/
-
-  public static User updateUser(User user) {
-    return user;
-  }
-
+    public static User update(User user) {
+        return null;
+    }
 
 }
+

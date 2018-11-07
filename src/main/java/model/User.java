@@ -9,6 +9,7 @@ public class User {
   private String password;
   private long createdTime;
 
+  //MAIKEN NOTES: Added createdTime in constructor
   public User(int id, String firstname, String lastname, String password, String email, long createdTime) {
     this.id = id;
     this.firstname = firstname;

@@ -18,7 +18,7 @@ import utils.Encryption;
 public class ProductEndpoints {
 
   //MAIKEN NOTES:
-  private static ProductCache productCache;
+  private ProductCache productCache;
 
   public ProductEndpoints(){
     this.productCache = new ProductCache();
@@ -35,14 +35,14 @@ public class ProductEndpoints {
     // Call our controller-layer in order to get the order from the DB
     Product product = ProductController.getProduct(idProduct);
 
-    // TODO: Add Encryption to JSON: FIX
+    // TODO: Add Encryption to JSON: FIXED
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(product);
 
     // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
     json = Encryption.encryptDecryptXOR(json);
 
-
+    //MAIKEN NOTES: IN CASE OF CRASH FIX
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
   }
@@ -56,14 +56,14 @@ public class ProductEndpoints {
     // Call our controller-layer in order to get the order from the DB
     ArrayList<Product> products = productCache.getProducts(false);
 
-    // TODO: Add Encryption to JSON: FIX
+    // TODO: Add Encryption to JSON: FIXED
     // We convert the java object to json with GSON library imported in Maven
     String json = new Gson().toJson(products);
 
     // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
     json = Encryption.encryptDecryptXOR(json);
 
-
+    //MAIKEN NOTES: IN CASE OF CRASH FIX
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
   }
@@ -82,6 +82,7 @@ public class ProductEndpoints {
     // Get the user back with the added ID and return it to the user
     String json = new Gson().toJson(createdProduct);
 
+    //MAIKEN NOTES: IN CASE OF CRASH FIX TRY CATCH
     // Return the data to the user
     if (createdProduct != null) {
       // Return a response with status 200 and JSON as type

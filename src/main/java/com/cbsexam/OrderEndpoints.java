@@ -18,7 +18,7 @@ import utils.Encryption;
 public class OrderEndpoints {
 
   //MAIKEN NOTES:
-  private static OrderCache orderCache;
+  private OrderCache orderCache;
 
   public OrderEndpoints(){
     this.orderCache = new OrderCache();
@@ -42,7 +42,7 @@ public class OrderEndpoints {
     // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
      json = Encryption.encryptDecryptXOR(json);
 
-
+    //MAIKEN NOTES: IN CASE OF CRASH FIX
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();
   }
@@ -63,7 +63,7 @@ public class OrderEndpoints {
     // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
     json = Encryption.encryptDecryptXOR(json);
 
-
+    //MAIKEN NOTES: IN CASE OF CRASH FIX
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();
   }
@@ -88,6 +88,8 @@ public class OrderEndpoints {
       return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
     } else {
 
+
+      //MAIKEN NOTES: IN CASE OF CRASH FIX
       // Return a response with status 400 and a message in text
       return Response.status(400).entity("Could not create user").build();
     }

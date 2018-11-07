@@ -31,6 +31,7 @@ public class ReviewEndpoints {
     // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
     json = Encryption.encryptDecryptXOR(json);
 
+    //MAIKEN NOTES: IN CASE OF CRASH FIX
     // Return a response with status 200 and JSON as type
     return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();
   }
