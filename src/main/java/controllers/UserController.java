@@ -210,7 +210,7 @@ public class UserController {
                         //Invalid Signing configuration / Couldn't convert Claims.
                     }
 
-                    //VERIFISERER TOKEN: SE OM JEG BURDE HA DETTE
+                    //VERIFISERER TOKEN: FORKLAR -- BRUK DETTE I DELETE FOR Å SAMMENLIGNE MED TOKENEN SOM SKAL SLETTES :)
                     String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE";
                     try {
                         Algorithm algorithm = Algorithm.HMAC256("secret");
