@@ -4,7 +4,6 @@ import cache.UserCache;
 import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import controllers.UserController;
-
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -13,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import model.User;
 import utils.Encryption;
 import utils.Log;
@@ -23,7 +21,7 @@ import utils.Log;
 public class UserEndpoints {
 
     //MAIKEN NOTES: sjekk om de skal være statiske eller ikke
-    private static UserCache userCache;
+    public static UserCache userCache;
     private UserController userController;
 
     public UserEndpoints() {
@@ -123,6 +121,9 @@ public class UserEndpoints {
         // Use the controller to add the user
         User createUser = UserController.createUser(newUser);
 
+        //MAIKEN NOTES:
+        newUser.setPassword(newUser.getPassword());
+
         // Get the user back with the added ID and return it to the user
         String json = new Gson().toJson(createUser);
 
@@ -168,7 +169,7 @@ public class UserEndpoints {
         return null;
     }
 
-
+/*
     //MAIKEN NOTES:
     // TODO: Make the system able to delete users:
     @POST
@@ -194,5 +195,5 @@ public class UserEndpoints {
         return null;
 
 
-    }
+    }*/
 }

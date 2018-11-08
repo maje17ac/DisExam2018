@@ -11,6 +11,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.cbsexam.UserEndpoints;
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -124,8 +125,6 @@ public class UserController {
         // Set creation time for user.
         user.setCreatedTime(System.currentTimeMillis() / 1000L);
 
-        //MAIKEN NOTES: Tror ikke jeg trenger det her
-        User.setPassword(String.valueOf(user.getCreatedTime()));
 
         // Check for DB Connection
         if (dbCon == null) {
@@ -154,13 +153,13 @@ public class UserController {
             //Update the userid of the user before returning
             user.setId(userID);
 
-            //utils.Hashing.md5(String);???
 
         } else {
             // Return null if user has not been inserted into database
             return null;
         }
 
+        UserEndpoints.userCache.getUsers(true);
 
         // Return user
         return user;
@@ -236,6 +235,7 @@ public class UserController {
 
     //MAIKEN NOTES:
     public String delete(User user) {
+
         // sammenlign den token som blir returnert etter at den er verifisert med en brugerobjekt mot den bruger som skal slettes
         // Man skal vel også her lage et sql statement som sletter brugeren fra databasen, hvis brugeren som skal slettes har token som er sammenlignet med den verifiserte token i login.
         //Hvordan tester man login, med returnert og verifisert token??

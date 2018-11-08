@@ -18,7 +18,7 @@ import utils.Encryption;
 public class OrderEndpoints {
 
   //MAIKEN NOTES:
-  private OrderCache orderCache;
+  public static OrderCache orderCache;
 
   public OrderEndpoints(){
     this.orderCache = new OrderCache();

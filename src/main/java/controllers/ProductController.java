@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import cache.ProductCache;
+import com.cbsexam.ProductEndpoints;
 import model.Product;
 import utils.Log;
 
@@ -121,6 +122,7 @@ public class ProductController {
                 rs.getInt("stock"));
 
         products.add(product);
+
       }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
@@ -161,10 +163,14 @@ public class ProductController {
     if (productID != 0) {
       //Update the productid of the product before returning
       product.setId(productID);
+
     } else{
       // Return null if product has not been inserted into database
       return null;
     }
+
+    //MAIKEN NOTES:
+    ProductEndpoints.productCache.getProducts(true);
 
     // Return product
     return product;

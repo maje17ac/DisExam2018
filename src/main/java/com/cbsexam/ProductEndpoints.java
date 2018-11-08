@@ -18,7 +18,7 @@ import utils.Encryption;
 public class ProductEndpoints {
 
   //MAIKEN NOTES:
-  private ProductCache productCache;
+  public static ProductCache productCache;
 
   public ProductEndpoints(){
     this.productCache = new ProductCache();

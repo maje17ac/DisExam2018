@@ -17,6 +17,7 @@ public class User {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
+    //MAIKEN NOTES: Denne metode hasher også de gamle brugernes passord som ikke er hashet, på samme måtes om setpassord Hasher de nye brugerenes passord
     this.password = Hashing.sha(password);
     this.email = email;
     this.createdTime = createdTime;
