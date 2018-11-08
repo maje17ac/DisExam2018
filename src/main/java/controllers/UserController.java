@@ -124,8 +124,8 @@ public class UserController {
         // Set creation time for user.
         user.setCreatedTime(System.currentTimeMillis() / 1000L);
 
-        //MAIKEN NOTES:
-        hashing.setSalt(String.valueOf(user.getCreatedTime()));
+        //MAIKEN NOTES: Tror ikke jeg trenger det her
+        User.setPassword(String.valueOf(user.getCreatedTime()));
 
         // Check for DB Connection
         if (dbCon == null) {
@@ -143,7 +143,7 @@ public class UserController {
                         + "', '"
                         + user.getLastname()
                         + "', '"
-                        + hashing.saltyHash(user.getPassword())  //MAIKEN NOTES: Hashing user password with salt before saving.
+                        + user.getPassword()  //MAIKEN NOTES: Hasher passordet i user klassen, og henter deretter passordet som allerede er hashet.
                         + "', '"
                         + user.getEmail()
                         + "', "
@@ -179,8 +179,7 @@ public class UserController {
         Log.writeLog(UserController.class.getName(), user, "Login", 0);
 
         // Build the query for DB
-        String sql = "SELECT * FROM user WHERE email=" + user.getEmail() + " AND password=" + hashing.saltyHash(user.getPassword());
-
+        String sql = "SELECT * FROM user WHERE email=" + user.getEmail() + " AND password=" + Hashing.sha(user.getPassword());
         // Actually do the query
         ResultSet rs = dbCon.query(sql);
         User loginUser = null;
@@ -196,8 +195,7 @@ public class UserController {
                         rs.getString("email"),
                         rs.getLong("created_at"));
 
-                hashing.setSalt(String.valueOf(user.getCreatedTime()));
-                if (user.getPassword().equals(hashing.saltyHash(user.getPassword()))) {
+                {
 
                     //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
                     //FINN UT HVA HMAC256 ER FOR NOE, EVT BRUK RSA256 da dette er en mer sikker token algoritme, siden HMAC256 kan gjøre sånn at andre kan finne din kode (?)
@@ -236,11 +234,20 @@ public class UserController {
     }
 
 
+    //MAIKEN NOTES:
     public String delete(User user) {
+        // sammenlign den token som blir returnert etter at den er verifisert med en brugerobjekt mot den bruger som skal slettes
+        // Man skal vel også her lage et sql statement som sletter brugeren fra databasen, hvis brugeren som skal slettes har token som er sammenlignet med den verifiserte token i login.
+        //Hvordan tester man login, med returnert og verifisert token??
+
+        // to databasekal: hent bruger og så slett
+
+
         return null;
     }
 
 
+    //MAIKEN
     public static User update(User user) {
         return null;
     }

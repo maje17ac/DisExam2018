@@ -12,6 +12,7 @@ public class ProductController {
 
   private static DatabaseController dbCon;
 
+
   public ProductController() {
     dbCon = new DatabaseController();
   }

@@ -17,7 +17,7 @@ public class User {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
-    //this.password = Hashing.sha(password);
+    this.password = Hashing.sha(password);
     this.email = email;
     this.createdTime = createdTime;
   }
@@ -59,8 +59,8 @@ public class User {
   }
 
   //MAIKEN NOTES:
-  public void setPassword(String password) {
-    this.password = Hashing.sha(password);
+  public static void setPassword(String password) {
+    password = Hashing.sha(password);
   }
 
   //MAIKE NOTES:

@@ -3,13 +3,15 @@ package utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import model.User;
 import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  private String salt = null;
+  //MAIKEN NOTES: Hører til alternativ metode m. salt, som ligger nederst i klassen
+  //private String salt = null;
 
-  //TILFØY SALT TIL HASHING(ARTIKKEL: BEST PRACTICE, SALT OG HASHING AV USER PASS)
   // TODO: You should add a salt and make this secure : FIXED
   public static String md5(String rawString) {
     try {
@@ -40,13 +42,14 @@ public final class Hashing {
     return null;
   }
 
+  //MAIKEN NOTES: Jeg velger SHA metoden, da den er sikrere og vanskeligere å knekke
   // TODO: You should add a salt and make this secure : FIXED
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-      //rawString = rawString + User.getCreatedTime();
+      rawString = rawString + User.getCreatedTime();
 
       // We convert to byte array
       byte[] hash = digest.digest(rawString.getBytes(StandardCharsets.UTF_8));
@@ -64,17 +67,21 @@ public final class Hashing {
     return rawString;
   }
 
+ /*  MAIKEN NOTES: METODE SOM OGSÅ LEGGER TIL SALT I PASSORDET, MEN KUN ET SALT FOR ALLE BRUGERE
+
   // Method to hash the password with salt, with a string parameter
   public String saltyHash(String password){
     //Defining the salt string, so it adds the salt string to the password string.
     String salt = password+this.salt;
 
     //bruk sha i stedet for md5: md5 er en gammel metode, som er lett å knekke, hvis man setter rainbows table så kan man finne det ut på kort tid, bruk deretter sha
-    return md5(salt);
+    return sha(salt);
 
   }
 
   public void setSalt(String salt) {
     this.salt = salt;
   }
+
+  */
 }

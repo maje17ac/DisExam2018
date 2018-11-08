@@ -24,7 +24,7 @@ public class UserEndpoints {
 
     //MAIKEN NOTES: sjekk om de skal være statiske eller ikke
     private static UserCache userCache;
-    private  UserController userController;
+    private UserController userController;
 
     public UserEndpoints() {
         this.userCache = new UserCache();
@@ -118,7 +118,7 @@ public class UserEndpoints {
         User newUser = new Gson().fromJson(body, User.class);
 
         //MAIKE NOTES
-       // newUser.setPassword(newUser.getPassword());
+        // newUser.setPassword(newUser.getPassword());
 
         // Use the controller to add the user
         User createUser = UserController.createUser(newUser);
@@ -142,9 +142,9 @@ public class UserEndpoints {
         return null;
     }
 
-    // TRE Endpoints som ikke er laget enda, implementer logikken, endpointet er der,
+
     //MAIKEN NOTES:
-    // TODO: Make the system able to login users and assign them a token to use throughout the system. : FIXED ???
+    // TODO: Make the system able to login users and assign them a token to use throughout the system. : FIXED
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -169,6 +169,7 @@ public class UserEndpoints {
     }
 
 
+    //MAIKEN NOTES:
     // TODO: Make the system able to delete users:
     @POST
     @Path("/delete/{idUSER}")
@@ -182,9 +183,7 @@ public class UserEndpoints {
     }
 
 
-
-/*
-
+    //MAIKEN NOTES:
     // TODO: Make the system able to update users:
     @POST
     @Path("/")
@@ -192,8 +191,8 @@ public class UserEndpoints {
     public Response updateUser(String body) {
 
 
+        return null;
 
-    } */
 
-
+    }
 }

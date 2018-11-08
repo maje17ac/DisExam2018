@@ -2,6 +2,7 @@ package controllers;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLTransactionRollbackException;
 import java.util.ArrayList;
 import cache.OrderCache;
 import model.Address;
@@ -125,6 +126,7 @@ public class OrderController {
 
   public static Order createOrder(Order order) {
 
+
     // Write in log that we've reach this step
     Log.writeLog(OrderController.class.getName(), order, "Actually creating a order in DB", 0);
 
@@ -150,7 +152,6 @@ public class OrderController {
 
     // TODO: Enable transactions in order for us to not save the order if somethings fails for some of the other inserts.
 
-
     // Insert the product in the DB
     int orderID = dbCon.insert(
         "INSERT INTO orders(user_id, billing_address_id, shipping_address_id, order_total, created_at, updated_at) VALUES("
@@ -172,6 +173,7 @@ public class OrderController {
       order.setId(orderID);
 
     }
+
 
 
 
