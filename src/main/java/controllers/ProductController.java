@@ -3,6 +3,8 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import cache.ProductCache;
 import model.Product;
 import utils.Log;
 
@@ -20,6 +22,9 @@ public class ProductController {
     if (dbCon == null) {
       dbCon = new DatabaseController();
     }
+
+    ProductCache productCache = new ProductCache();
+    productCache.getProducts(true);
 
     // Build the SQL query for the DB
     String sql = "SELECT * FROM product where id=" + id;

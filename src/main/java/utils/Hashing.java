@@ -46,6 +46,8 @@ public final class Hashing {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
+      //rawString = rawString + User.getCreatedTime();
+
       // We convert to byte array
       byte[] hash = digest.digest(rawString.getBytes(StandardCharsets.UTF_8));
 
@@ -66,6 +68,8 @@ public final class Hashing {
   public String saltyHash(String password){
     //Defining the salt string, so it adds the salt string to the password string.
     String salt = password+this.salt;
+
+    //bruk sha i stedet for md5: md5 er en gammel metode, som er lett å knekke, hvis man setter rainbows table så kan man finne det ut på kort tid, bruk deretter sha
     return md5(salt);
 
   }

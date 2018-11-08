@@ -1,6 +1,7 @@
 package com.cbsexam;
 
 import cache.UserCache;
+import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import controllers.UserController;
 
@@ -21,9 +22,9 @@ import utils.Log;
 @Path("user")
 public class UserEndpoints {
 
-    //MAIKEN NOTES:
-    private UserCache userCache;
-    private UserController userController;
+    //MAIKEN NOTES: sjekk om de skal være statiske eller ikke
+    private static UserCache userCache;
+    private  UserController userController;
 
     public UserEndpoints() {
         this.userCache = new UserCache();
@@ -116,6 +117,9 @@ public class UserEndpoints {
         // Read the json from body and transfer it to a user class
         User newUser = new Gson().fromJson(body, User.class);
 
+        //MAIKE NOTES
+       // newUser.setPassword(newUser.getPassword());
+
         // Use the controller to add the user
         User createUser = UserController.createUser(newUser);
 
@@ -173,19 +177,7 @@ public class UserEndpoints {
 
         User user = new Gson().fromJson(body, User.class);
 
-        String token = userController.delete(user);
 
-        // Return the data to the user
-        try {
-            if (token != null) {
-                // Return a response with status 200 and JSON as type
-                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
-            } else {
-                return Response.status(400).entity("Could not login").build();
-            }
-        } catch (Exception e5) {
-            System.out.println(e5.getMessage());
-        }
         return null;
     }
 

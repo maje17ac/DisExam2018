@@ -1,5 +1,7 @@
 package model;
 
+import utils.Hashing;
+
 public class User {
 
   public int id;
@@ -7,14 +9,15 @@ public class User {
   public String lastname;
   public String email;
   private String password;
-  private long createdTime;
+  //MAIKEN NOTES:
+  private static long createdTime;
 
   //MAIKEN NOTES: Added createdTime in constructor
   public User(int id, String firstname, String lastname, String password, String email, long createdTime) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
-    this.password = password;
+    //this.password = Hashing.sha(password);
     this.email = email;
     this.createdTime = createdTime;
   }
@@ -55,13 +58,16 @@ public class User {
     return password;
   }
 
+  //MAIKEN NOTES:
   public void setPassword(String password) {
-    this.password = password;
+    this.password = Hashing.sha(password);
   }
 
-  public long getCreatedTime() {
+  //MAIKE NOTES:
+  public static long getCreatedTime() {
     return createdTime;
   }
+
 
   public void setCreatedTime(long createdTime) {
     this.createdTime = createdTime;

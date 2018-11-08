@@ -25,7 +25,7 @@ public class UserController {
     public UserController() {
         this.dbCon = new DatabaseController();
         this.hashing = new Hashing();
-        this.token = null;
+        this.token = token;
 
     }
 
@@ -170,11 +170,16 @@ public class UserController {
     //MAIKEN NOTES:
     public String login(User user) {
 
+        // Check for connection
+        if (dbCon == null) {
+            dbCon = new DatabaseController();
+        }
+
         // Write in log that we've reach this step
         Log.writeLog(UserController.class.getName(), user, "Login", 0);
 
         // Build the query for DB
-        String sql = "SELECT * FROM user where email=" + user.getEmail() + " AND password=" + hashing.saltyHash(user.getPassword());
+        String sql = "SELECT * FROM user WHERE email=" + user.getEmail() + " AND password=" + hashing.saltyHash(user.getPassword());
 
         // Actually do the query
         ResultSet rs = dbCon.query(sql);
@@ -195,7 +200,7 @@ public class UserController {
                 if (user.getPassword().equals(hashing.saltyHash(user.getPassword()))) {
 
                     //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
-                    //FINN UT HVA HMAC256 ER FOR NOE
+                    //FINN UT HVA HMAC256 ER FOR NOE, EVT BRUK RSA256 da dette er en mer sikker token algoritme, siden HMAC256 kan gjøre sånn at andre kan finne din kode (?)
                     try {
                         Algorithm algorithm = Algorithm.HMAC256("secret");
                         token = JWT.create()

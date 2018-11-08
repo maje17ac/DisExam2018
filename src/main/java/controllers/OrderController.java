@@ -38,6 +38,8 @@ public class OrderController {
     try {
       if (rs.next()) {
 
+        //MAIKEN NOTES: OPTIMIZE !!!!!!!!!
+
         // Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
         ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
@@ -88,6 +90,8 @@ public class OrderController {
 
     try {
       while(rs.next()) {
+
+        //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
 
         // Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
@@ -140,9 +144,12 @@ public class OrderController {
     // Save the user to the database and save them back to initial order instance
     order.setCustomer(UserController.createUser(order.getCustomer()));
 
+    //MAIKEN NOTES: FIXXXXXX  !!!!!!!
+
     // Når man lager en ny ordre, så skal man opprette x antalll linjer og en bruger og to adresser, hva skjer hvis noe går galt underveis, feil inntasting i shipping, opprett på annet hvis eller rulle tilbake
 
     // TODO: Enable transactions in order for us to not save the order if somethings fails for some of the other inserts.
+
 
     // Insert the product in the DB
     int orderID = dbCon.insert(
@@ -163,7 +170,11 @@ public class OrderController {
     if (orderID != 0) {
       //Update the productid of the product before returning
       order.setId(orderID);
+
     }
+
+
+
 
     // Create an empty list in order to go trough items and then save them back with ID
     ArrayList<LineItem> items = new ArrayList<LineItem>();
