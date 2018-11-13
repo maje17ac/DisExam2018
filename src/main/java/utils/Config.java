@@ -20,6 +20,7 @@ public final class Config {
     private static int SOLR_PORT;
     private static String SOLR_PATH;
     private static String SOLR_CORE;
+    // Creating a String variabel for encryption key
     private static String ENCRYPTION_KEY;
     private static long PRODUCT_TTL;
     private static long ORDER_TTL;

@@ -9,6 +9,7 @@ public class User {
   public String lastname;
   public String email;
   private String password;
+  private String token;
   //MAIKEN NOTES:
   private static long createdTime;
 
@@ -21,6 +22,10 @@ public class User {
     this.password = Hashing.sha(password);
     this.email = email;
     this.createdTime = createdTime;
+  }
+
+  public String getToken() {
+    return token;
   }
 
   public int getId() {

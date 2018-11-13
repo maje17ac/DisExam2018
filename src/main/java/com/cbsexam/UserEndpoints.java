@@ -4,14 +4,12 @@ import cache.UserCache;
 import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import controllers.UserController;
+
 import java.util.ArrayList;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import model.User;
 import utils.Encryption;
 import utils.Log;
@@ -56,7 +54,7 @@ public class UserEndpoints {
         //MAIKEN NOTES:
 
         try {
-            if (user != null) {
+            if (idUser != 0) {
                 // Return a response with status 200 and JSON as type
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
             } else {
@@ -169,19 +167,18 @@ public class UserEndpoints {
         return null;
     }
 
+
 /*
     //MAIKEN NOTES:
     // TODO: Make the system able to delete users:
-    @POST
-    @Path("/delete/{idUSER}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteUser(String body) {
-
-        User user = new Gson().fromJson(body, User.class);
+    @DELETE
+    @Path("/delete")
+    public Response deleteUser(String token) {
 
 
         return null;
     }
+
 
 
     //MAIKEN NOTES:

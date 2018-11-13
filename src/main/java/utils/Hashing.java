@@ -9,10 +9,9 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  //MAIKEN NOTES: Hører til alternativ metode m. salt, som ligger nederst i klassen
-  //private String salt = null;
+  //MAIKEN NOTES:
 
-  // TODO: You should add a salt and make this secure : FIXED
+  // TODO: You should add a salt and make this secure : METHOD NOT IN USE
   public static String md5(String rawString) {
     try {
 
@@ -49,6 +48,7 @@ public final class Hashing {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
+      //MAIKEN NOTES:
       rawString = rawString + User.getCreatedTime();
 
       // We convert to byte array

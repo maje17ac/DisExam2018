@@ -9,6 +9,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.cbsexam.UserEndpoints;
@@ -20,12 +21,10 @@ import utils.Log;
 public class UserController {
     //MAIKEN NOTES:
     private static DatabaseController dbCon;
-    private static Hashing hashing;
     private String token;
 
     public UserController() {
         this.dbCon = new DatabaseController();
-        this.hashing = new Hashing();
         this.token = token;
 
     }
@@ -134,7 +133,7 @@ public class UserController {
 
         // Insert the user in the DB
         // hashing algoritmer er implementert så bruk dette.
-        // TODO: Hash the user password before saving it : FIX
+        // TODO: Hash the user password before saving it : FIXED
         // MAIKEN NOTES:
         int userID = dbCon.insert(
                 "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
@@ -166,19 +165,19 @@ public class UserController {
     }
 
 
-    //MAIKEN NOTES:
+    //MAIKEN NOTES: SQL statement for å hente email og hashet passord. Henter token algoritme og oppretter token. Verifiserer også tokenen, og returnerer token direkte.
     public String login(User user) {
+
+        // Write in log that we've reach this step
+        Log.writeLog(UserController.class.getName(), user, "Login", 0);
 
         // Check for connection
         if (dbCon == null) {
             dbCon = new DatabaseController();
         }
 
-        // Write in log that we've reach this step
-        Log.writeLog(UserController.class.getName(), user, "Login", 0);
-
         // Build the query for DB
-        String sql = "SELECT * FROM user WHERE email=" + user.getEmail() + " AND password=" + Hashing.sha(user.getPassword());
+        String sql = "SELECT * FROM user WHERE email='" + user.getEmail() + "' AND password='" + Hashing.sha(user.getPassword()) + "'";
         // Actually do the query
         ResultSet rs = dbCon.query(sql);
         User loginUser = null;
@@ -186,7 +185,7 @@ public class UserController {
         try {
             // Get first object, since we only have one
             if (rs.next()) {
-                user = new User(
+                loginUser = new User(
                         rs.getInt("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
@@ -201,24 +200,12 @@ public class UserController {
                     try {
                         Algorithm algorithm = Algorithm.HMAC256("secret");
                         token = JWT.create()
-                                .withIssuer("auth0")
+                                .withIssuer("auth0").withClaim("userId", loginUser.id)
                                 .sign(algorithm);
                     } catch (JWTCreationException exception) {
                         //Invalid Signing configuration / Couldn't convert Claims.
                     }
 
-                    //VERIFISERER TOKEN: FORKLAR -- BRUK DETTE I DELETE FOR Å SAMMENLIGNE MED TOKENEN SOM SKAL SLETTES :)
-                    String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXUyJ9.eyJpc3MiOiJhdXRoMCJ9.AbIJTDMFc7yUa5MhvcP03nJPyCPzZtQcGEp-zWfOkEE";
-                    try {
-                        Algorithm algorithm = Algorithm.HMAC256("secret");
-                        JWTVerifier verifier = JWT.require(algorithm)
-                                .withIssuer("auth0")
-                                .build(); //Reusable verifier instance
-                        DecodedJWT jwt = verifier.verify(token);
-                    } catch (JWTVerificationException exception) {
-                        System.out.println(exception.getMessage());
-                        //Invalid signature/claims
-                    }
                     //Returnerer token direkte
                     return token;
                 }
@@ -234,20 +221,13 @@ public class UserController {
 
 
     //MAIKEN NOTES:
-    public String delete(User user) {
-
-        // sammenlign den token som blir returnert etter at den er verifisert med en brugerobjekt mot den bruger som skal slettes
-        // Man skal vel også her lage et sql statement som sletter brugeren fra databasen, hvis brugeren som skal slettes har token som er sammenlignet med den verifiserte token i login.
-        //Hvordan tester man login, med returnert og verifisert token??
-
-        // to databasekal: hent bruger og så slett
-
+    public String delete(String token) {
 
         return null;
     }
 
 
-    //MAIKEN
+    //MAIKEN NOTES:
     public static User update(User user) {
         return null;
     }
