@@ -141,7 +141,7 @@ public class UserController {
                         + "', '"
                         + user.getLastname()
                         + "', '"
-                        + user.getPassword()  //MAIKEN NOTES: Hasher passordet i user klassen, og henter deretter passordet som allerede er hashet.
+                        + Hashing.sha(user.getPassword())  //MAIKEN NOTES: Hasher passordet i user klassen, og henter deretter passordet som allerede er hashet.
                         + "', '"
                         + user.getEmail()
                         + "', "
