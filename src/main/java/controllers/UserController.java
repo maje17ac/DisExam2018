@@ -29,9 +29,6 @@ public class UserController {
 
     }
 
-
-    // sql statement som finner email og password
-    //hvis den finner en bruger, inne i den når det eksekverer og ikke feiler, resultset ikke er null, så kjører
     public static User getUser(int id) {
 
         // Check for connection
@@ -71,7 +68,7 @@ public class UserController {
             System.out.println(ex.getMessage());
         }
 
-        // Return null -- MAIKE NOTES: Se på det her, returen av verdien user er alltid null, da det er definert lenger oppe (linje 47) :)
+
         return user;
     }
 
@@ -132,7 +129,6 @@ public class UserController {
 
 
         // Insert the user in the DB
-        // hashing algoritmer er implementert så bruk dette.
         // TODO: Hash the user password before saving it : FIXED
         // MAIKEN NOTES:
         int userID = dbCon.insert(
@@ -193,18 +189,16 @@ public class UserController {
                         rs.getString("email"),
                         rs.getLong("created_at"));
 
-                {
-
-                    //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
-                    //FINN UT HVA HMAC256 ER FOR NOE, EVT BRUK RSA256 da dette er en mer sikker token algoritme, siden HMAC256 kan gjøre sånn at andre kan finne din kode (?)
-                    try {
-                        Algorithm algorithm = Algorithm.HMAC256("secret");
-                        token = JWT.create()
-                                .withIssuer("auth0").withClaim("userId", loginUser.id)
-                                .sign(algorithm);
-                    } catch (JWTCreationException exception) {
-                        //Invalid Signing configuration / Couldn't convert Claims.
-                    }
+                //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
+                //FINN UT HVA HMAC256 ER FOR NOE
+                try {
+                    Algorithm algorithm = Algorithm.HMAC256("secret");
+                    token = JWT.create()
+                            //MAIKEN NOTES: LEGGER TIL WITHCLAIM, OG SENDER ID MED DET OBJEKTET AV LOGINUSER MED TOKEN
+                            .withIssuer("auth0").withClaim("userId", loginUser.id)
+                            .sign(algorithm);
+                } catch (JWTCreationException exception) {
+                    //Invalid Signing configuration / Couldn't convert Claims.}
 
                     //Returnerer token direkte
                     return token;
@@ -221,15 +215,81 @@ public class UserController {
 
 
     //MAIKEN NOTES:
-    public String delete(String token) {
+    public boolean delete(String token) {
 
-        return null;
+        // Dekoder token: KILDE https://github.com/auth0/java-jwt, FINN UT HVA DEN GJØR
+        DecodedJWT jwt = null;
+        try {
+            jwt = JWT.decode(token);
+        } catch (JWTDecodeException exception) {
+            //Invalid token
+        }
+
+        // Write in log that we've reach this step
+        Log.writeLog(UserController.class.getName(), null, "Delete user by id", 0);
+
+        // Check for connection
+        if (dbCon == null) {
+            dbCon = new DatabaseController();
+        }
+
+        String sql = "DELETE FROM user WHERE id=" + jwt.getClaim("userId").asInt();
+        // MAIKEN NOTES: Bruger insert, fordi man trenger og bruge executeUpdate, da
+        int i = dbCon.insert(sql);
+
+        if (i == 1) {
+            return true;
+        } else {
+            return false;
+
+        }
     }
 
 
     //MAIKEN NOTES:
-    public static User update(User user) {
+    public String update(User user, String token) {
+
+        // Dekoder token: KILDE https://github.com/auth0/java-jwt, FINN UT HVA DEN GJØR
+        DecodedJWT jwt = null;
+        try {
+            jwt = JWT.decode(token);
+        } catch (JWTDecodeException exception) {
+            //Invalid token
+
+            // Write in log that we've reach this step
+            Log.writeLog(UserController.class.getName(), user, "Updating user", 0);
+
+            // Check for connection
+            if (dbCon == null) {
+                dbCon = new DatabaseController();
+            }
+
+            // Build the query for DB
+            String sql = "UPDATE user SET first_name='" + user.getFirstname() + "' SET last_name='" + user.getLastname() + "' SET password='" + user.getPassword() + "' SET email='" + user.getEmail() + "'";
+            // Actually do the query
+            ResultSet rs = dbCon.query(sql);
+            User updateUser = null;
+
+            try {
+                // Get first object, since we only have one
+                if (rs.next()) {
+                    updateUser = new User(
+                            rs.getInt("id"),
+                            rs.getString("first_name"),
+                            rs.getString("last_name"),
+                            rs.getString("password"),
+                            rs.getString("email"),
+                            rs.getLong("created_at"));
+
+                } else {
+                    System.out.println("No user found");
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
         return null;
+
     }
 
 }

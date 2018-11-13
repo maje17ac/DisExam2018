@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import cache.OrderCache;
 import com.cbsexam.OrderEndpoints;
+import com.sun.xml.internal.bind.v2.TODO;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -39,8 +40,9 @@ public class OrderController {
         try {
             if (rs.next()) {
 
-                //MAIKEN NOTES: OPTIMIZE !!!!!!!!!
 
+                //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
+                // TODO: OPTIMIZE
                 // Perhaps we could optimize things a bit here and get rid of nested queries.
                 User user = UserController.getUser(rs.getInt("user_id"));
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
@@ -84,6 +86,7 @@ public class OrderController {
         }
 
 
+        //FIKS DETTE; EN LANG SQL LEFT JOIN, I stedet for nested queries
         String sql = "SELECT * FROM order";
 
         ResultSet rs = dbCon.query(sql);
@@ -93,7 +96,7 @@ public class OrderController {
             while (rs.next()) {
 
                 //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
-
+                // TODO: OPTIMIZE
                 // Perhaps we could optimize things a bit here and get rid of nested queries.
                 User user = UserController.getUser(rs.getInt("user_id"));
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));

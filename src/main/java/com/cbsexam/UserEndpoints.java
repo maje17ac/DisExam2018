@@ -1,7 +1,6 @@
 package com.cbsexam;
 
 import cache.UserCache;
-import com.auth0.jwt.JWT;
 import com.google.gson.Gson;
 import controllers.UserController;
 
@@ -31,7 +30,6 @@ public class UserEndpoints {
      * @param idUser
      * @return Responses
      */
-    // her bruker man bath user/iduser
     @GET
     @Path("/{idUser}")
     public Response getUser(@PathParam("idUser") int idUser) {
@@ -113,9 +111,6 @@ public class UserEndpoints {
         // Read the json from body and transfer it to a user class
         User newUser = new Gson().fromJson(body, User.class);
 
-        //MAIKE NOTES
-        // newUser.setPassword(newUser.getPassword());
-
         // Use the controller to add the user
         User createUser = UserController.createUser(newUser);
 
@@ -168,14 +163,20 @@ public class UserEndpoints {
     }
 
 
-/*
     //MAIKEN NOTES:
-    // TODO: Make the system able to delete users:
+    // TODO: Make the system able to delete users: FIXED
     @DELETE
     @Path("/delete")
     public Response deleteUser(String token) {
 
-
+        try {
+            if (userController.delete(token) != false) {
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+            }
+            return Response.status(400).entity("Could not login").build();
+        } catch (Exception e4) {
+            System.out.println(e4.getMessage());
+        }
         return null;
     }
 
@@ -189,8 +190,12 @@ public class UserEndpoints {
     public Response updateUser(String body) {
 
 
+
+
+
         return null;
 
 
-    }*/
+    }
+
 }
