@@ -88,8 +88,6 @@ public class OrderEndpoints {
       return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
     } else {
 
-
-      //MAIKEN NOTES: IN CASE OF CRASH FIX
       // Return a response with status 400 and a message in text
       return Response.status(400).entity("Could not create user").build();
     }

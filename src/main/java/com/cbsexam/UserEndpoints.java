@@ -119,13 +119,16 @@ public class UserEndpoints {
 
         // Get the user back with the added ID and return it to the user
         String json = new Gson().toJson(createUser);
+        // TODO: ENCRYPTION
+        // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+        json = Encryption.encryptDecryptXOR(json);
 
         //MAIKEN NOTES: IN CASE OF CRASH FIX TRY CATCH
         // Return the data to the user
         try {
             if (createUser != null) {
                 // Return a response with status 200 and JSON as type
-                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Brugeren er opprettet" + json).build();
             } else {
                 return Response.status(400).entity("Could not create user").build();
             }
@@ -148,11 +151,15 @@ public class UserEndpoints {
 
         String token = userController.login(user);
 
+        // TODO: ENCRYPTION
+        // Krypterer token String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+        token = Encryption.encryptDecryptXOR(token);
+
         // Return the data to the user
         try {
             if (token != null) {
                 // Return a response with status 200 and JSON as type
-                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Brugeren med id" + user.getId() + "er nå logget inn").build();
             } else {
                 return Response.status(400).entity("Could not login").build();
             }
@@ -171,7 +178,7 @@ public class UserEndpoints {
 
         try {
             if (userController.delete(token) != false) {
-                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Brugeren med følgende token er nå logget inn:" + token).build();
             }
             return Response.status(400).entity("Could not login").build();
         } catch (Exception e4) {
@@ -181,21 +188,31 @@ public class UserEndpoints {
     }
 
 
-
-    //MAIKEN NOTES:
-    // TODO: Make the system able to update users:
-    @POST
+    //MAIKEN NOTES: ENDRET FRA POST TIL PUT!!!!!
+    // TODO: Make the system able to update users: FIXED
+    @PUT
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(String body) {
 
+// Update med bruker objektet og token i body, slik at det kan kryperes.
 
+        User user = new Gson().fromJson(body, User.class);
 
+        try {
 
-
+            if (UserController.updateUser(user, user.getToken())) {
+                userCache.getUsers(true);
+                return Response.status(200).entity("Brugeren ble oppdatert").build();
+            } else {
+                return Response.status(400).entity("Could not update user").build();
+            }
+        } catch (Exception e4) {
+            System.out.println(e4.getMessage());
+        }
         return null;
-
 
     }
 
 }
+

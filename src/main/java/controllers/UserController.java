@@ -3,7 +3,6 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import cache.UserCache;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -247,50 +246,41 @@ public class UserController {
 
 
     //MAIKEN NOTES:
-    public String update(User user, String token) {
+    public static boolean updateUser(User user, String token) {
 
-        // Dekoder token: KILDE https://github.com/auth0/java-jwt, FINN UT HVA DEN GJØR
-        DecodedJWT jwt = null;
-        try {
-            jwt = JWT.decode(token);
-        } catch (JWTDecodeException exception) {
-            //Invalid token
-
-            // Write in log that we've reach this step
-            Log.writeLog(UserController.class.getName(), user, "Updating user", 0);
-
-            // Check for connection
-            if (dbCon == null) {
-                dbCon = new DatabaseController();
-            }
-
-            // Build the query for DB
-            String sql = "UPDATE user SET first_name='" + user.getFirstname() + "' SET last_name='" + user.getLastname() + "' SET password='" + user.getPassword() + "' SET email='" + user.getEmail() + "'";
-            // Actually do the query
-            ResultSet rs = dbCon.query(sql);
-            User updateUser = null;
-
-            try {
-                // Get first object, since we only have one
-                if (rs.next()) {
-                    updateUser = new User(
-                            rs.getInt("id"),
-                            rs.getString("first_name"),
-                            rs.getString("last_name"),
-                            rs.getString("password"),
-                            rs.getString("email"),
-                            rs.getLong("created_at"));
-
-                } else {
-                    System.out.println("No user found");
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
+        // Check for connection
+        if (dbCon == null) {
+            dbCon = new DatabaseController();
         }
-        return null;
+
+        // Verifiserer token: KILDE https://github.com/auth0/java-jwt, FINN UT HVA DEN GJØR
+        DecodedJWT jwt = null;
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("secret");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("cbsexam")
+                    .build(); //Reusable verifier instance
+                     jwt = verifier.verify(token);
+        } catch (JWTVerificationException exception){
+            exception.printStackTrace();
+            //Invalid signature/claims
+        }
+
+        String sql = "UPDATE user SET first_name = '" + user.getFirstname() + "', last_name='" + user.getLastname() + "', password ='" + Hashing.sha(user.getPassword()) + "' ,email=,'" + user.getEmail() + " ' WHERE id = " + jwt.getClaim("userId").asInt();
+
+        int j = dbCon.insert(sql);
+
+        if (j == 1) {
+            return true;
+        } else {
+            return false;
+
+        }
+
 
     }
 
 }
+
 

@@ -3,7 +3,6 @@ package cache;
 import controllers.UserController;
 import model.User;
 import utils.Config;
-
 import java.util.ArrayList;
 
 //TODO: Build this cache and use it : FIXED

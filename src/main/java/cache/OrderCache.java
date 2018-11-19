@@ -1,10 +1,8 @@
 package cache;
 
 import controllers.OrderController;
-import controllers.ProductController;
 import model.Order;
 import utils.Config;
-
 import java.util.ArrayList;
 
 //TODO: Build this cache and use it : FIXED
@@ -31,7 +29,7 @@ public class OrderCache {
         // MAIKEN NOTES: ENDRET FRA >= til <= && i stedet for this.orders.isEmpty(): this.orders == null
         if (forceUpdate
                 || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
-                || this.orders == null) {
+                || this.orders == null) {  //isempty
 
             // Get products from controller, since we wish to update.
             ArrayList<Order> orders = OrderController.getOrders();

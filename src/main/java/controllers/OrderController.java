@@ -3,12 +3,7 @@ package controllers;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLTransactionRollbackException;
 import java.util.ArrayList;
-
-import cache.OrderCache;
-import com.cbsexam.OrderEndpoints;
-import com.sun.xml.internal.bind.v2.TODO;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -87,7 +82,8 @@ public class OrderController {
 
 
         //FIKS DETTE; EN LANG SQL LEFT JOIN, I stedet for nested queries
-        String sql = "SELECT * FROM order";
+        //String sql = "SELECT * FROM orders";
+        String sql = "SELECT *, billing.street_address as billing, shipping.street_address as shipping FROM orders LEFT JOIN address as billing ON orders.billing_address_id=billing.id LEFT JOIN address as shipping ON orders.shipping_address_id = shipping.id FROM orders LEFT JOIN user ON user.id = orders.user_id";
 
         ResultSet rs = dbCon.query(sql);
         ArrayList<Order> orders = new ArrayList<Order>();
@@ -98,10 +94,35 @@ public class OrderController {
                 //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
                 // TODO: OPTIMIZE
                 // Perhaps we could optimize things a bit here and get rid of nested queries.
-                User user = UserController.getUser(rs.getInt("user_id"));
+
+               User user = new User(
+                                rs.getInt("id"),
+                                rs.getString("first_name"),
+                                rs.getString("last_name"),
+                                rs.getString("password"),
+                                rs.getString("email"),
+                                rs.getLong("created_at"));
+
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
-                Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
-                Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
+
+               // Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
+               // Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
+
+                Address billingAddress =
+                        new Address(
+                                rs.getInt("id"),
+                                rs.getString("name"),
+                                rs.getString("street_address"),
+                                rs.getString("city"),
+                                rs.getString("zipcode"));
+
+                Address shippingAddress =
+                        new Address(
+                                rs.getInt("id"),
+                                rs.getString("name"),
+                                rs.getString("street_address"),
+                                rs.getString("city"),
+                                rs.getString("zipcode"));
 
                 // Create an order from the database data
                 Order order =
@@ -127,7 +148,8 @@ public class OrderController {
         return orders;
     }
 
-    public static Order createOrder(Order order) {
+
+    public static Order createOrder(Order order){
 
 
         // Write in log that we've reach this step
@@ -153,7 +175,7 @@ public class OrderController {
         // TODO: Enable transactions in order for us to not save the order if somethings fails for some of the other inserts : FIXED
 
         //Setter connection til null
-        Connection connection = null;
+        Connection connection = dbCon.getConnection();
 
         // Try catch med SQL exception i tilfelle feil i databasen
         try {
@@ -174,6 +196,9 @@ public class OrderController {
                             + ", "
                             + order.getUpdatedAt()
                             + ")");
+
+
+            //throw new SQLException();
 
             if (orderID != 0) {
                 //Update the productid of the product before returning
@@ -197,6 +222,7 @@ public class OrderController {
             connection.commit();
 
         } catch (SQLException e) {
+            e.printStackTrace();
 
             try {
                 /* Realiserer connection objektet's database og JDBC ressurser øyeblikkelig,
