@@ -45,12 +45,12 @@ public class UserEndpoints {
         json = Encryption.encryptDecryptXOR(json);
 
 
-
-    /* Man kunne forestille seg at det skal returneres noe annet?? Hvis man ikke kunne finne det id, så kan brugeren ha noe annet en noe tomt svar. Gjelde de andre endpoints hvis det er, showcase */
+        /* Man kunne forestille seg at det skal returneres noe annet?? Hvis man ikke kunne finne det id, så kan brugeren ha noe annet en noe tomt svar. Gjelde de andre endpoints hvis det er, showcase :
+        * (if/else and try catch on return for response status) */
         // Return the user with the status code 200
-        // TODO: What should happen if something breaks down? : (if/else and try catch on return for response status)  WORKING
-        //MAIKEN NOTES:
 
+        // TODO: What should happen if something breaks down? : FIXED
+        //MAIKEN NOTES:
         try {
             if (idUser != 0) {
                 // Return a response with status 200 and JSON as type
@@ -58,8 +58,8 @@ public class UserEndpoints {
             } else {
                 return Response.status(400).entity("Could not get user").build();
             }
-        } catch (Exception e1) {
-            System.out.println(e1.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -86,9 +86,7 @@ public class UserEndpoints {
         // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
         json = Encryption.encryptDecryptXOR(json);
 
-
         //MAIKEN NOTES:
-
         try {
             if (users != null) {
                 // Return a response with status 200 and JSON as type
@@ -96,8 +94,8 @@ public class UserEndpoints {
             } else {
                 return Response.status(400).entity("Could not get user").build();
             }
-        } catch (Exception e2) {
-            System.out.println(e2.getMessage());
+        } catch (Exception e1) {
+            e1.printStackTrace();
         }
         return null;
     }
@@ -114,16 +112,10 @@ public class UserEndpoints {
         // Use the controller to add the user
         User createUser = UserController.createUser(newUser);
 
-        //MAIKEN NOTES:
-        newUser.setPassword(newUser.getPassword());
-
         // Get the user back with the added ID and return it to the user
         String json = new Gson().toJson(createUser);
-        // TODO: ENCRYPTION
-        // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
-        json = Encryption.encryptDecryptXOR(json);
 
-        //MAIKEN NOTES: IN CASE OF CRASH FIX TRY CATCH
+        //MAIKEN NOTES:
         // Return the data to the user
         try {
             if (createUser != null) {
@@ -133,8 +125,8 @@ public class UserEndpoints {
                 return Response.status(400).entity("Could not create user").build();
             }
 
-        } catch (Exception e3) {
-            System.out.println(e3.getMessage());
+        } catch (Exception e2) {
+            e2.printStackTrace();
         }
         return null;
     }
@@ -151,10 +143,6 @@ public class UserEndpoints {
 
         String token = userController.login(user);
 
-        // TODO: ENCRYPTION
-        // Krypterer token String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
-        token = Encryption.encryptDecryptXOR(token);
-
         // Return the data to the user
         try {
             if (token != null) {
@@ -163,8 +151,8 @@ public class UserEndpoints {
             } else {
                 return Response.status(400).entity("Could not login").build();
             }
-        } catch (Exception e4) {
-            System.out.println(e4.getMessage());
+        } catch (Exception e3) {
+            e3.printStackTrace();
         }
         return null;
     }
@@ -177,25 +165,24 @@ public class UserEndpoints {
     public Response deleteUser(String token) {
 
         try {
-            if (userController.delete(token) != false) {
+            if (userController.delete(token)) {
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Brugeren med følgende token er nå logget inn:" + token).build();
             }
             return Response.status(400).entity("Could not login").build();
         } catch (Exception e4) {
-            System.out.println(e4.getMessage());
+            e4.printStackTrace();
         }
         return null;
     }
 
 
-    //MAIKEN NOTES: ENDRET FRA POST TIL PUT!!!!!
+    //MAIKEN NOTES: ENDRET FRA POST TIL PUT!!!!!      - KRYPTER ???
     // TODO: Make the system able to update users: FIXED
     @PUT
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(String body) {
-
-// Update med bruker objektet og token i body, slik at det kan kryperes.
+        // Update med bruker objektet og token i body, slik at det kan kryperes.
 
         User user = new Gson().fromJson(body, User.class);
 
@@ -207,8 +194,8 @@ public class UserEndpoints {
             } else {
                 return Response.status(400).entity("Could not update user").build();
             }
-        } catch (Exception e4) {
-            System.out.println(e4.getMessage());
+        } catch (Exception e5) {
+            e5.printStackTrace();
         }
         return null;
 

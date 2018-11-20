@@ -11,7 +11,7 @@ public final class Hashing {
 
   //MAIKEN NOTES:
 
-  // TODO: You should add a salt and make this secure : METHOD NOT IN USE
+  // TODO: You should add a salt and make this secure : (method not in use)
   public static String md5(String rawString) {
     try {
 
@@ -42,20 +42,26 @@ public final class Hashing {
   }
 
   //MAIKEN NOTES: Jeg velger SHA metoden, da den er sikrere og vanskeligere å knekke
+  // Har også lagt min salt string i config
   // TODO: You should add a salt and make this secure : FIXED
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
+      String salt = Config.getHashSalt();
+
       //MAIKEN NOTES:
-      rawString = rawString + User.getCreatedTime();
+      rawString = rawString + salt;
 
       // We convert to byte array
       byte[] hash = digest.digest(rawString.getBytes(StandardCharsets.UTF_8));
 
       // We create the hashed string
       String sha256hex = new String(Hex.encode(hash));
+
+
+
 
       // And return the string
       return sha256hex;

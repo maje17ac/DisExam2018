@@ -29,7 +29,7 @@ public class OrderCache {
         // MAIKEN NOTES: ENDRET FRA >= til <= && i stedet for this.orders.isEmpty(): this.orders == null
         if (forceUpdate
                 || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
-                || this.orders == null) {  //isempty
+                || this.orders == null) {    //isEmpty();
 
             // Get products from controller, since we wish to update.
             ArrayList<Order> orders = OrderController.getOrders();

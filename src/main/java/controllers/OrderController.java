@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.cbsexam.OrderEndpoints;
+import com.sun.deploy.util.OrderedHashSet;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -82,8 +85,8 @@ public class OrderController {
 
 
         //FIKS DETTE; EN LANG SQL LEFT JOIN, I stedet for nested queries
-        //String sql = "SELECT * FROM orders";
-        String sql = "SELECT *, billing.street_address as billing, shipping.street_address as shipping FROM orders LEFT JOIN address as billing ON orders.billing_address_id=billing.id LEFT JOIN address as shipping ON orders.shipping_address_id = shipping.id FROM orders LEFT JOIN user ON user.id = orders.user_id";
+        String sql = "SELECT * FROM orders";
+        //String sql = "SELECT *, billing.street_address as billing, shipping.street_address as shipping FROM orders LEFT JOIN address as billing ON orders.billing_address_id=billing.id LEFT JOIN address as shipping ON orders.shipping_address_id = shipping.id FROM orders LEFT JOIN user ON user.id = orders.user_id";
 
         ResultSet rs = dbCon.query(sql);
         ArrayList<Order> orders = new ArrayList<Order>();
@@ -95,34 +98,10 @@ public class OrderController {
                 // TODO: OPTIMIZE
                 // Perhaps we could optimize things a bit here and get rid of nested queries.
 
-               User user = new User(
-                                rs.getInt("id"),
-                                rs.getString("first_name"),
-                                rs.getString("last_name"),
-                                rs.getString("password"),
-                                rs.getString("email"),
-                                rs.getLong("created_at"));
-
-                ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
-
-               // Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
-               // Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
-
-                Address billingAddress =
-                        new Address(
-                                rs.getInt("id"),
-                                rs.getString("name"),
-                                rs.getString("street_address"),
-                                rs.getString("city"),
-                                rs.getString("zipcode"));
-
-                Address shippingAddress =
-                        new Address(
-                                rs.getInt("id"),
-                                rs.getString("name"),
-                                rs.getString("street_address"),
-                                rs.getString("city"),
-                                rs.getString("zipcode"));
+               User user = UserController.getUser(rs.getInt("user_id"));
+               ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
+               Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
+               Address shippingAddress = AddressController.getAddress(rs.getInt("shipping_address_id"));
 
                 // Create an order from the database data
                 Order order =
@@ -241,6 +220,11 @@ public class OrderController {
             }
 
         }
+
+
+        //LEGG til ORDERCACHE her
+        OrderEndpoints.orderCache.getOrders(true);
+
 
         // Return order
         return order;
