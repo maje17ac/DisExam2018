@@ -50,13 +50,13 @@ public class UserEndpoints {
         // Return the user with the status code 200
 
         // TODO: What should happen if something breaks down? : FIXED
-        //MAIKEN NOTES:
+        //MAIKEN NOTES:  HVIS DET IKKE LIGGER EN USER MED DET ID SÅ SKAL MAN RETURNERE EN 404 ??
         try {
             if (idUser != 0) {
                 // Return a response with status 200 and JSON as type
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
             } else {
-                return Response.status(400).entity("Could not get user").build();
+                return Response.status(404).entity("Could not get user").build();
             }
         } catch (Exception e) {
             e.printStackTrace();
