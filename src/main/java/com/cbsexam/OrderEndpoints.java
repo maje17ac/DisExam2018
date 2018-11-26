@@ -16,10 +16,11 @@ import javax.ws.rs.core.Response;
 import model.Order;
 import utils.Encryption;
 
+//MAIKEN NOTES: Alle de endpoints som er fra orderklassen, bruker path "order"
 @Path("order")
 public class OrderEndpoints {
 
-    //MAIKEN NOTES:
+    //MAIKEN NOTES: Oppretter et objekt av OrderCache klassen, skal være statisk da vi bruger de i statiske metoder i controllerne
     public static OrderCache orderCache;
 
     public OrderEndpoints() {
@@ -41,13 +42,11 @@ public class OrderEndpoints {
         // We convert the java object to json with GSON library imported in Maven
         String json = new Gson().toJson(order);
 
-        // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+        // MAIKEN NOTES: Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
         json = Encryption.encryptDecryptXOR(json);
 
-    /*//MAIKEN NOTES: IN CASE OF CRASH FIX
-    // Return a response with status 200 and JSON as type
-    return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();*/
 
+        //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
         try {
             if (idOrder != 0) {
                 // Return a response with status 200 and JSON as type
@@ -68,21 +67,18 @@ public class OrderEndpoints {
     @Path("/")
     public Response getOrders() {
 
-        // MAIKEN NOTES:
-        // Call our controller-layer in order to get the order from the DB
+        // MAIKEN NOTES: Kaller på metoden getOrders i Cache klassen, slik at vi kan hente ordrene gjennom den og force update true/false (som igjen henter ordrene fra controllers)
         ArrayList<Order> orders = orderCache.getOrders(false);
 
         // TODO: Add Encryption to JSON: FIXED
         // We convert the java object to json with GSON library imported in Maven
         String json = new Gson().toJson(orders);
 
-        // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+        // MAIKEN NOTES: Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
         json = Encryption.encryptDecryptXOR(json);
 
 
-       /* //MAIKEN NOTES: IN CASE OF CRASH FIX
-        // Return a response with status 200 and JSON as type
-        return Response.status(200).type(MediaType.TEXT_PLAIN_TYPE).entity(json).build();*/
+        //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
         try {
             if (orders != null) {
                 // Return a response with status 200 and JSON as type
@@ -111,9 +107,9 @@ public class OrderEndpoints {
         String json = new Gson().toJson(createdOrder);
 
 
-        //MAIKEN NOTES:
+        //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
         try {
-            if (!createdOrder.equals(null)) {
+            if (createdOrder != null) {
                 // Return a response with status 200 and JSON as type
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
             } else {

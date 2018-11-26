@@ -73,21 +73,4 @@ public final class Hashing {
     return rawString;
   }
 
- /*  MAIKEN NOTES: METODE SOM OGSÅ LEGGER TIL SALT I PASSORDET, MEN KUN ET SALT FOR ALLE BRUGERE
-
-  // Method to hash the password with salt, with a string parameter
-  public String saltyHash(String password){
-    //Defining the salt string, so it adds the salt string to the password string.
-    String salt = password+this.salt;
-
-    //bruk sha i stedet for md5: md5 er en gammel metode, som er lett å knekke, hvis man setter rainbows table så kan man finne det ut på kort tid, bruk deretter sha
-    return sha(salt);
-
-  }
-
-  public void setSalt(String salt) {
-    this.salt = salt;
-  }
-
-  */
 }

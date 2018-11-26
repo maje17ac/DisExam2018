@@ -33,10 +33,9 @@ public class OrderController {
         String sql = "SELECT*,\n" +
                 "billing.street_address as billing, shipping.street_address as shipping \n" +
                 "FROM orders \n" +
-                "LEFT JOIN address as billing \n" +
-                "ON orders.billing_address_id=billing.id\n" +
-                "LEFT JOIN address as shipping \n" +
-                "ON orders.shipping_address_id = shipping.id\n" +
+                "JOIN USER ON user.id = orders.user_id\n" +
+                "JOIN address as billing ON orders.billing_address_id = billing.id \n" +
+                "JOIN address as shipping ON orders.shipping_address_id = shipping.id \n" +
                 "WHERE orders.id= " + id;
 
         // Do the query in the database and create an empty object for the results
@@ -57,7 +56,7 @@ public class OrderController {
 
 
                 //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
-                // TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
+                // TODO: Perhaps we could optimize things a bit here and get rid of nested queries: FIXED
                 //User user = UserController.getUser(rs.getInt("user_id"));
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
                // Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
@@ -65,17 +64,17 @@ public class OrderController {
 
                 Address billingAddress =
                         new Address(
-                                rs.getInt("id"),
+                                rs.getInt("billing_address_id"),
                                 rs.getString("name"),
-                                rs.getString("street_address"),
+                                rs.getString("billing"),
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
                 Address shippingAddress =
                         new Address(
-                                rs.getInt("id"),
+                                rs.getInt("shipping_address_id"),
                                 rs.getString("name"),
-                                rs.getString("street_address"),
+                                rs.getString("shipping"),
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
@@ -119,13 +118,13 @@ public class OrderController {
 
         //FIKS DETTE; EN LANG SQL LEFT JOIN, I stedet for nested queries
         //String sql = "SELECT * FROM orders";
+
         String sql = "SELECT*,\n" +
                 "billing.street_address as billing, shipping.street_address as shipping \n" +
                 "FROM orders \n" +
-                "LEFT JOIN address as billing \n" +
-                "ON orders.billing_address_id=billing.id\n" +
-                "LEFT JOIN address as shipping \n" +
-                "ON orders.shipping_address_id = shipping.id";
+                "JOIN user ON user.id = orders.user_id \n" +
+                "JOIN address AS billing ON orders.billing_address_id = billing.id\n" +
+                "JOIN address AS shipping ON orders.shipping_address_id = shipping.id\n";
 
         ResultSet rs = dbCon.query(sql);
         ArrayList<Order> orders = new ArrayList<Order>();
@@ -134,7 +133,7 @@ public class OrderController {
             while (rs.next()) {
 
                 //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
-                //TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
+                //TODO: Perhaps we could optimize things a bit here and get rid of nested queries : FIXED
 
                 User user = new User(
                         rs.getInt("id"),
@@ -152,17 +151,17 @@ public class OrderController {
 
                 Address billingAddress =
                         new Address(
-                                rs.getInt("id"),
+                                rs.getInt("billing_address_id"),
                                 rs.getString("name"),
-                                rs.getString("street_address"),
+                                rs.getString("billing"),
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
                 Address shippingAddress =
                         new Address(
-                                rs.getInt("id"),
+                                rs.getInt("shipping_address_id"),
                                 rs.getString("name"),
-                                rs.getString("street_address"),
+                                rs.getString("shipping"),
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
@@ -261,7 +260,7 @@ public class OrderController {
             order.setLineItems(items);
 
              /* Gjør om alle endringer i current transaction, and releases any database locks som evt. er holdt.
-             Denne metoden brukes kun når vi har satt autcommit til false, som jeg har gjort i linje 158. */
+             Denne metoden brukes kun når vi har satt autcommit til false */
             connection.commit();
 
         } catch (SQLException e) {

@@ -3,6 +3,7 @@ package cache;
 import controllers.UserController;
 import model.User;
 import utils.Config;
+
 import java.util.ArrayList;
 
 //TODO: Build this cache and use it : FIXED
@@ -10,13 +11,13 @@ import java.util.ArrayList;
 
 public class UserCache {
 
-    // List of users
+    // Liste over brukere
     private ArrayList<User> users;
 
-    // Time cache should live
+    // Levetid til cachen
     private long ttl;
 
-    // Sets when the cache has been created
+    // Setter tid til når cachen har blitt opprettet
     private long created;
 
     public UserCache() {
@@ -25,23 +26,24 @@ public class UserCache {
 
     public ArrayList<User> getUsers(Boolean forceUpdate) {
 
-        // If we whis to clear cache, we can set force update.
-        // Otherwise we look at the age of the cache and figure out if we should update.
-        // If the list is empty we also check for new products
-        // MAIKEN NOTES: ENDRET FRA >= til <= && i stedet for this.orders.isEmpty(): this.orders == null
+        /* Hvis vi ønsker å klarere cachen, kan vi fremtvinge en oppdatering
+        Eller, så vil vi se på alderen for cachen og finne ut når vi skal oppdatere.
+        Hvis created time + levetid er større enn fastsatt levetid så vil man oppdatere
+        Hvis listen er tom, så sjekker vi også for nye produkter, endrer fra isEmpty() til == null, hvis ikke vil den ike hente brugerne */
+
         if (forceUpdate
-                || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
+                || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
                 || this.users == null) {
 
-            // Get products from controller, since we wish to update.
+            // Henter brukerne fra controlleren, siden vi ønsker å oppdatere
             ArrayList<User> users = UserController.getUsers();
 
-            // Set products for the instance and set created timestamp
+            // Setter users for instansen og setter opprettet tidsstempel
             this.users = users;
             this.created = System.currentTimeMillis() / 1000L;
         }
 
-        // Return the documents
+        // Returnerer dokumentene
         return this.users;
 
     }

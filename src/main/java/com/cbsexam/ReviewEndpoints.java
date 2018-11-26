@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import model.Review;
 import utils.Encryption;
 
+//MAIKEN NOTES: Alle de endpoints som er fra reviewklassen, bruker path "search"
 @Path("search")
 public class ReviewEndpoints {
 
@@ -31,16 +32,11 @@ public class ReviewEndpoints {
         // We convert the java object to json with GSON library imported in Maven
         String json = new Gson().toJson(reviews);
 
-        // Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
+        //MAIKEN NOTES: Krypterer json String, ved å kalle på algoritmen som ligger i klassen Encryption som nå tar json String som parameter for rawstring
         json = Encryption.encryptDecryptXOR(json);
 
 
-        /*
-        //MAIKEN NOTES: IN CASE OF CRASH FIX
-        // Return a response with status 200 and JSON as type
-        return Response.status(200).type(MediaType.APPLICATION_JSON).entity(json).build();
-        }*/
-
+        //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
         try {
             if (!reviewTitle.equals(null)) {
                 // Return a response with status 200 and JSON as type

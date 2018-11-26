@@ -21,11 +21,12 @@ public final class Config {
     private static String SOLR_PATH;
     private static String SOLR_CORE;
     // Creating a String variabel for encryption key
+    private static String HASH_SALT;
     private static String ENCRYPTION_KEY;
     private static long PRODUCT_TTL;
     private static long ORDER_TTL;
     private static long USER_TTL;
-    private static String HASH_SALT;
+
 
 
     public static String getDatabaseHost() {
@@ -69,6 +70,10 @@ public final class Config {
         return SOLR_CORE;
     }
 
+    public static String getHashSalt() {
+        return HASH_SALT;
+    }
+
     public static char[] getEncryptionKey() {
         return ENCRYPTION_KEY.toCharArray();
     }
@@ -85,12 +90,8 @@ public final class Config {
         return USER_TTL;
     }
 
-    public static String getHashSalt() {
-        return HASH_SALT;
-    }
 
     public static void initializeConfig() throws IOException {
-
 
 
         // Init variables to parse JSON
@@ -124,13 +125,13 @@ public final class Config {
         SOLR_PORT = Integer.parseInt(json.get("SOLR_PORT").toString().replace("\"", ""));
         SOLR_PATH = json.get("SOLR_PATH").toString().replace("\"", "");
         SOLR_CORE = json.get("SOLR_CORE").toString().replace("\"", "");
+        HASH_SALT = json.get("HASH_SALT").getAsString();
         ENCRYPTION_KEY = json.get("ENCRYPTION_KEY").getAsString();
         PRODUCT_TTL = json.get("PRODUCT_TTL").getAsLong();
         ORDER_TTL = json.get("ORDER_TTL").getAsLong();
         USER_TTL = json.get("USER_TTL").getAsLong();
-        HASH_SALT = json.get("HASH_SALT").getAsString();
-    }
 
+    }
 
 
 }

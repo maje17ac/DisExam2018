@@ -267,7 +267,8 @@ public class UserController {
             //Invalid signature/claims
         }
 
-        String sql = "UPDATE user SET first_name = '" + user.getFirstname() + "', last_name='" + user.getLastname() + "', password ='" + Hashing.sha(user.getPassword()) + "' ,email=,'" + user.getEmail() + " ' WHERE id = " + jwt.getClaim("userId").asInt();
+        String sql = "UPDATE user SET first_name = '" + user.getFirstname() + "', last_name='" + user.getLastname()
+                + "', password ='" + Hashing.sha(user.getPassword()) + "' ,email=,'" + user.getEmail() + " ' WHERE id = " + jwt.getClaim("userId").asInt();
 
         int j = dbCon.insert(sql);
 
@@ -282,5 +283,7 @@ public class UserController {
     }
 
 }
+
+
 
 
