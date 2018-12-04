@@ -18,7 +18,7 @@ import utils.Log;
 
 
 public class UserController {
-    //MAIKEN NOTES:
+    //MAIKEN NOTES: Oppretter en token String
     private static DatabaseController dbCon;
     private String token;
 
@@ -35,9 +35,6 @@ public class UserController {
             dbCon = new DatabaseController();
         }
 
-        UserCache userCache = new UserCache();
-        userCache.getUsers(true);
-
         // Build the query for DB
         String sql = "SELECT * FROM user where id=" + id;
 
@@ -47,7 +44,7 @@ public class UserController {
 
         try {
             // Get first object, since we only have one
-            //MAIKEN NOTES
+
             if (rs.next()) {
                 user =
                         new User(
@@ -129,14 +126,14 @@ public class UserController {
 
         // Insert the user in the DB
         // TODO: Hash the user password before saving it : FIXED
-        // MAIKEN NOTES:
+        // MAIKEN NOTES: Hasher passordet før det lagres
         int userID = dbCon.insert(
                 "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
                         + user.getFirstname()
                         + "', '"
                         + user.getLastname()
                         + "', '"
-                        + Hashing.sha(user.getPassword())  //MAIKEN NOTES: Hasher passordet i user klassen, og henter deretter passordet som allerede er hashet.
+                        + Hashing.sha(user.getPassword())
                         + "', '"
                         + user.getEmail()
                         + "', "
@@ -153,6 +150,7 @@ public class UserController {
             return null;
         }
 
+        //MAIKEN NOTES: Setter force update til true
         UserEndpoints.userCache.getUsers(true);
 
         // Return user
@@ -160,7 +158,8 @@ public class UserController {
     }
 
 
-    //MAIKEN NOTES: SQL statement for å hente email og hashet passord. Henter token algoritme og oppretter token. Verifiserer også tokenen, og returnerer token direkte.
+    //MAIKEN NOTES: SQL statement for å hente email og hashet passord. Henter token algoritme som oppretter og assigner token, og returnerer token direkte.
+
     public String login(User user) {
 
         // Write in log that we've reach this step
@@ -189,7 +188,6 @@ public class UserController {
                         rs.getLong("created_at"));
 
                 //MAIKEN NOTES: KILDE https://github.com/auth0/java-jwt
-                //FINN UT HVA HMAC256 ER FOR NOE
                 try {
                     Algorithm algorithm = Algorithm.HMAC256("secret");
                     token = JWT.create()
@@ -213,7 +211,7 @@ public class UserController {
     }
 
 
-    //MAIKEN NOTES:
+    //MAIKEN NOTES: Sletter bruger med token, altså man kan kun slette sin egen bruger med den token man har blitt assignet, og man sletter bruger med denne token
     public boolean delete(String token) {
 
         // Dekoder token: KILDE https://github.com/auth0/java-jwt, FINN UT HVA DEN GJØR
@@ -232,8 +230,9 @@ public class UserController {
             dbCon = new DatabaseController();
         }
 
+        //MAIKEN NOTES: Databasekall hvor vi henter bruger med id, som er lagt til som Claim i jwt
         String sql = "DELETE FROM user WHERE id=" + jwt.getClaim("userId").asInt();
-        // MAIKEN NOTES: Bruger insert, fordi man trenger og bruge executeUpdate, da
+        // MAIKEN NOTES: Bruger insert, fordi man trenger og bruge executeUpdate
         int i = dbCon.insert(sql);
 
         if (i == 1) {
@@ -245,7 +244,7 @@ public class UserController {
     }
 
 
-    //MAIKEN NOTES:
+    //MAIKEN NOTES: Oppdaterer bruger, man verifiserer token, om den er tilhørende en bruger slik at man kun kan oppdatere seg selv som bruger
     public static boolean updateUser(User user, String token) {
 
         // Check for connection
@@ -253,7 +252,7 @@ public class UserController {
             dbCon = new DatabaseController();
         }
 
-        // Verifiserer token: KILDE https://github.com/auth0/java-jwt, FINN UT HVA DEN GJØR
+        // MAIKEN NOTES: Verifiserer token: KILDE https://github.com/auth0/java-jwt
         DecodedJWT jwt = null;
 
         try {
@@ -267,6 +266,7 @@ public class UserController {
             //Invalid signature/claims
         }
 
+        //MAIKE NOTES: Databasekald som oppdaterer brugerinformasjonen, hasher passordet, og med id som claim i jwt ved token.
         String sql = "UPDATE user SET first_name = '" + user.getFirstname() + "', last_name='" + user.getLastname()
                 + "', password ='" + Hashing.sha(user.getPassword()) + "' ,email=,'" + user.getEmail() + " ' WHERE id = " + jwt.getClaim("userId").asInt();
 

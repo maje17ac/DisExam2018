@@ -106,7 +106,7 @@ public class ProductController {
         ResultSet rs = dbCon.query(sql);
         ArrayList<Product> products = new ArrayList<Product>();
 
-        // ENDRET DRA name til product_name
+        // MAIKEN NOTES: endret columnlabel fra name til product_name, så det samsvarer med labelet i databasen
         try {
             while (rs.next()) {
                 Product product =
@@ -166,7 +166,7 @@ public class ProductController {
             return null;
         }
 
-        //MAIKEN NOTES:
+        //MAIKEN NOTES: Setter forceupdate til true
         ProductEndpoints.productCache.getProducts(true);
 
         // Return product

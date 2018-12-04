@@ -9,7 +9,7 @@ public final class Encryption {
         // If encryption is enabled in Config.
         if (Config.getEncryption()) {
 
-            // The key is now more complex in config.json, and created in Config
+            //MAIKEN NOTES: Nøkkelen er nå mer kompleks, og gemt i config
             // TODO: Create a more complex code and store it somewhere better : FIXED
             char[] key = Config.getEncryptionKey();
 

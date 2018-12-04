@@ -9,21 +9,22 @@ public class User {
   public String lastname;
   public String email;
   private String password;
-  private String token;
   //MAIKEN NOTES:
-  private static long createdTime;
+  private String token;
+  private  long createdTime;
 
   //MAIKEN NOTES: Added createdTime in constructor
   public User(int id, String firstname, String lastname, String password, String email, long createdTime) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
-    //MAIKEN NOTES: Denne metode hasher også de gamle brugernes passord som ikke er hashet, på samme måtes om setpassord Hasher de nye brugerenes passord
+    //MAIKEN NOTES: Hasher passordet i konstruktøren
     this.password = Hashing.sha(password);
     this.email = email;
     this.createdTime = createdTime;
   }
 
+  // MAIKEN NOTES: getmetode for token
   public String getToken() {
     return token;
   }
@@ -64,16 +65,15 @@ public class User {
     return password;
   }
 
-  //MAIKEN NOTES:
+  //MAIKEN NOTES: Når jeg setter passord, setter jeg passord som hashet
   public static void setPassword(String password) {
     password = Hashing.sha(password);
   }
 
-  //MAIKE NOTES:
-  public static long getCreatedTime() {
+  //MAIKE NOTES: Get og metode for created time
+  public long getCreatedTime() {
     return createdTime;
   }
-
 
   public void setCreatedTime(long createdTime) {
     this.createdTime = createdTime;

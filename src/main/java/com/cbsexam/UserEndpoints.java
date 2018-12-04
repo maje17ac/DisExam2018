@@ -155,7 +155,7 @@ public class UserEndpoints {
     }
 
 
-    //MAIKEN NOTES:
+    //MAIKEN NOTES: Sletter bruger med token, og sjekker om hvis token er verifisert, hvis den er blir brugeren slettet, og hvis ikke returneres en 400
     // TODO: Make the system able to delete users: FIXED
     @DELETE
     @Path("/delete")
@@ -166,7 +166,7 @@ public class UserEndpoints {
             if (userController.delete(token)) {
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Brugeren med følgende token er nå slettet:" + token).build();
             } else {
-                return Response.status(400).entity("Could not login").build();
+                return Response.status(400).entity("Could not delete").build();
             }
         } catch (Exception e4) {
             e4.printStackTrace();

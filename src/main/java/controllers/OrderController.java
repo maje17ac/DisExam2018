@@ -28,8 +28,8 @@ public class OrderController {
             dbCon = new DatabaseController();
         }
 
-        // Build SQL string to query
-        //String sql = "SELECT * FROM orders where id=" + id;
+        //MAIKEN NOTES: Joiner tabellene, slik at vi ikke lenger behøver nested queries, og henter derfor informasjon om order,
+        // bruger og adress ved med databasekald med id, siden getorder metoden har id som parameter.
         String sql = "SELECT*,\n" +
                 "billing.street_address as billing, shipping.street_address as shipping \n" +
                 "FROM orders \n" +
@@ -55,7 +55,6 @@ public class OrderController {
                         rs.getLong("created_at"));
 
 
-                //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
                 // TODO: Perhaps we could optimize things a bit here and get rid of nested queries: FIXED
                 //User user = UserController.getUser(rs.getInt("user_id"));
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
@@ -116,9 +115,8 @@ public class OrderController {
         }
 
 
-        //FIKS DETTE; EN LANG SQL LEFT JOIN, I stedet for nested queries
-        //String sql = "SELECT * FROM orders";
 
+        //MAIKEN NOTES: Gjør det samme som ovenfor, men her uten id
         String sql = "SELECT*,\n" +
                 "billing.street_address as billing, shipping.street_address as shipping \n" +
                 "FROM orders \n" +
@@ -132,7 +130,7 @@ public class OrderController {
         try {
             while (rs.next()) {
 
-                //MAIKEN NOTES:  OPTIMIZE!!!!!!!!!!!!
+
                 //TODO: Perhaps we could optimize things a bit here and get rid of nested queries : FIXED
 
                 User user = new User(
@@ -285,7 +283,7 @@ public class OrderController {
         }
 
 
-        //LEGG til ORDERCACHE her
+        //Maiken NOTES: Setter forceupdate til true
         OrderEndpoints.orderCache.getOrders(true);
 
 

@@ -3,13 +3,9 @@ package utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import model.User;
 import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
-
-  //MAIKEN NOTES:
 
   // TODO: You should add a salt and make this secure : (method not in use)
   public static String md5(String rawString) {
@@ -41,17 +37,17 @@ public final class Hashing {
     return null;
   }
 
-  //MAIKEN NOTES: Jeg velger SHA metoden, da den er sikrere og vanskeligere å knekke
-  // Har også lagt min salt string i config
+  //MAIKEN NOTES: Jeg velger SHA metoden, da den er sikrere og vanskeligere å knekke, har også lagt min salt string i config
   // TODO: You should add a salt and make this secure : FIXED
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
+      //MAIKEN NOTES: oppretter en string av salt som er gemt i config
       String salt = Config.getHashSalt();
 
-      //MAIKEN NOTES:
+      //MAIKEN NOTES: legger til salt stringen til raw stringen, som da er passordet
       rawString = rawString + salt;
 
       // We convert to byte array
@@ -59,9 +55,6 @@ public final class Hashing {
 
       // We create the hashed string
       String sha256hex = new String(Hex.encode(hash));
-
-
-
 
       // And return the string
       return sha256hex;
