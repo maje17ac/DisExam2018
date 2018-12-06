@@ -98,7 +98,7 @@ public class UserEndpoints {
 
 
     @POST
-    @Path("/")
+    @Path("/create")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(String body) {
 
@@ -140,18 +140,19 @@ public class UserEndpoints {
         //MAIKEN NOTES: Use the controller to add token
         String token = userController.login(user);
 
+        //return Response.status(400).entity(token).build();
         //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
         try {
             if (token != null) {
                 // Return a response with status 200 and JSON as type
-                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Brugeren med id" + user.getId() + "er nå logget inn").build();
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
             } else {
                 return Response.status(400).entity("Could not login").build();
             }
         } catch (Exception e3) {
             e3.printStackTrace();
         }
-        return null;
+       return null;
     }
 
 
@@ -178,7 +179,7 @@ public class UserEndpoints {
     //MAIKEN NOTES: Endret fra post til put, da jeg bruker post i login, og det gir mer mening og oppdatere gjennom put
     // TODO: Make the system able to update users: FIXED
     @PUT
-    @Path("/")
+    @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateUser(String body) {
 

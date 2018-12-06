@@ -194,11 +194,12 @@ public class UserController {
                             //MAIKEN NOTES: LEGGER TIL WITHCLAIM, OG SENDER ID MED DET OBJEKTET AV LOGINUSER MED TOKEN
                             .withIssuer("auth0").withClaim("userId", loginUser.id)
                             .sign(algorithm);
-                } catch (JWTCreationException exception) {
-                    //Invalid Signing configuration / Couldn't convert Claims.}
 
                     //Returnerer token direkte
                     return token;
+                } catch (JWTCreationException exception) {
+                    //Invalid Signing configuration / Couldn't convert Claims.}
+
                 }
 
             } else {
@@ -206,6 +207,7 @@ public class UserController {
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
+            return ex.getMessage();
         }
         return null;
     }
