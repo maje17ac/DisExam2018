@@ -107,6 +107,7 @@ public class ProductEndpoints {
         String json = new Gson().toJson(createdProduct);
 
 
+
         //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
         try {
             if (createdProduct != null) {

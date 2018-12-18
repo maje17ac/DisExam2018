@@ -166,9 +166,6 @@ public class ProductController {
             return null;
         }
 
-        //MAIKEN NOTES: Setter forceupdate til true
-        ProductEndpoints.productCache.getProducts(true);
-
         // Return product
         return product;
     }

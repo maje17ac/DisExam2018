@@ -33,10 +33,11 @@ public class OrderController {
         String sql = "SELECT*,\n" +
                 "billing.street_address as billing, shipping.street_address as shipping \n" +
                 "FROM orders \n" +
-                "JOIN USER ON user.id = orders.user_id\n" +
+                "JOIN USER ON orders.user_id = user.id\n" +
                 "JOIN address as billing ON orders.billing_address_id = billing.id \n" +
                 "JOIN address as shipping ON orders.shipping_address_id = shipping.id \n" +
                 "WHERE orders.id= " + id;
+        // Se på den her, virker ikke å hente en enkelt order med id
 
         // Do the query in the database and create an empty object for the results
         ResultSet rs = dbCon.query(sql);
@@ -45,9 +46,8 @@ public class OrderController {
         try {
             if (rs.next()) {
 
-
                 User user = new User(
-                        rs.getInt("id"),
+                        rs.getInt("user_id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("password"),
@@ -117,12 +117,12 @@ public class OrderController {
 
 
         //MAIKEN NOTES: Gjør det samme som ovenfor, men her uten id
-        String sql = "SELECT*,\n" +
-                "billing.street_address as billing, shipping.street_address as shipping \n" +
-                "FROM orders \n" +
-                "JOIN user ON user.id = orders.user_id \n" +
-                "JOIN address AS billing ON orders.billing_address_id = billing.id\n" +
-                "JOIN address AS shipping ON orders.shipping_address_id = shipping.id\n";
+        String sql = "SELECT *,\n" +
+                "billing.street_address as billing, shipping.street_address as shipping\n" +
+                "from orders\n" +
+                "join user on orders.user_id = user.id\n" +
+                "Join address as billing on orders.billing_address_id=billing.id\n" +
+                "join address as shipping on orders.shipping_address_id=shipping.id";
 
         ResultSet rs = dbCon.query(sql);
         ArrayList<Order> orders = new ArrayList<Order>();
@@ -134,7 +134,7 @@ public class OrderController {
                 //TODO: Perhaps we could optimize things a bit here and get rid of nested queries : FIXED
 
                 User user = new User(
-                        rs.getInt("id"),
+                        rs.getInt("user_id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
                         rs.getString("password"),
@@ -282,10 +282,8 @@ public class OrderController {
 
         }
 
-
-        //Maiken NOTES: Setter forceupdate til true
+        //MAIKEN NOTES: Setting cache to force update
         OrderEndpoints.orderCache.getOrders(true);
-
 
         // Return order
         return order;

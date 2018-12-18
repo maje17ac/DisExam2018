@@ -30,7 +30,7 @@ public class ProductCache {
          If the list is empty we also check for new products, endrer fra isEmpty() til == null, hvis ikke vil den ike hente produktene*/
 
         if (forceUpdate
-                || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
+                || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
                 || this.products == null) {
 
             // Get products from controller, since we wish to update.

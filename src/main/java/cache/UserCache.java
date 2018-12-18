@@ -32,7 +32,7 @@ public class UserCache {
         Hvis listen er tom, så sjekker vi også for nye produkter, endrer fra isEmpty() til == null, hvis ikke vil den ike hente brugerne */
 
         if (forceUpdate
-                || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
+                || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
                 || this.users == null) {
 
             // Henter brukerne fra controlleren, siden vi ønsker å oppdatere

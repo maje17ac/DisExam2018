@@ -150,9 +150,6 @@ public class UserController {
             return null;
         }
 
-        //MAIKEN NOTES: Setter force update til true
-        UserEndpoints.userCache.getUsers(true);
-
         // Return user
         return user;
     }

@@ -34,7 +34,7 @@ public class OrderEndpoints {
     @GET
     @Path("/{idOrder}")
     public Response getOrder(@PathParam("idOrder") int idOrder) {
-
+        try {
         // Call our controller-layer in order to get the order from the DB
         Order order = OrderController.getOrder(idOrder);
 
@@ -47,7 +47,7 @@ public class OrderEndpoints {
 
 
         //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
-        try {
+
             if (idOrder != 0) {
                 // Return a response with status 200 and JSON as type
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
@@ -79,17 +79,13 @@ public class OrderEndpoints {
 
 
         //MAIKEN NOTES: Legger til response status, og if/else slik at det returnerer to ulike responser avhengig av betingelsene i statementet
-        try {
+
             if (orders != null) {
                 // Return a response with status 200 and JSON as type
                 return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
             } else {
                 return Response.status(400).entity("Could not get orders").build();
             }
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-        return null;
     }
 
     @POST
