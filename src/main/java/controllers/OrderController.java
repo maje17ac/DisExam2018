@@ -30,13 +30,12 @@ public class OrderController {
 
         //MAIKEN NOTES: Joiner tabellene, slik at vi ikke lenger behøver nested queries, og henter derfor informasjon om order,
         // bruger og adress ved med databasekald med id, siden getorder metoden har id som parameter.
-        String sql = "SELECT*,\n" +
-                "billing.street_address as billing, shipping.street_address as shipping \n" +
-                "FROM orders \n" +
-                "JOIN USER ON orders.user_id = user.id\n" +
-                "JOIN address as billing ON orders.billing_address_id = billing.id \n" +
-                "JOIN address as shipping ON orders.shipping_address_id = shipping.id \n" +
-                "WHERE orders.id= " + id;
+        String sql = "SELECT *,\n" +
+                "billing.street_address as billing, shipping.street_address as shipping\n" +
+                "from orders\n" +
+                "join user on orders.user_id = user.id\n" +
+                "Join address as billing on orders.billing_address_id=billing.id\n" +
+                "join address as shipping on orders.shipping_address_id=shipping.id where orders.id=" + id;
         // Se på den her, virker ikke å hente en enkelt order med id
 
         // Do the query in the database and create an empty object for the results

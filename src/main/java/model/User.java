@@ -65,7 +65,7 @@ public class User {
     return password;
   }
 
-  //MAIKEN NOTES: Når jeg setter passord, setter jeg passord som hashet
+  //MAIKEN NOTES: Når jeg setter passord, setter jeg passord som hashet(metoden brukes dog ikke, da den også settes som hashet i databasekallet)
   public static void setPassword(String password) {
     password = Hashing.sha(password);
   }
